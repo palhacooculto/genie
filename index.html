@@ -624,19 +624,29 @@ const LEADS = 'https://script.google.com/macros/s/AKfycbxhfEGRzCf6aUhaePPYpmrO7G
     if (dz.length < 10 || dz.length > 11) return ruim(zap, 'Digite o WhatsApp com DDD.');
     try { localStorage.setItem('genie-ck', JSON.stringify({n, e: em, z: zap.value})); } catch(_){}
     if (!CHECKOUT) { erro.textContent = 'Link do checkout ainda não configurado.'; return; }
-    // salva o lead na planilha (sendBeacon sobrevive à troca de página)
+    // salva o lead na planilha ANTES de sair da página (3 caminhos; o servidor ignora repetidos pelo id)
     const q = new URLSearchParams(location.search);
-    const lead = JSON.stringify({nome: n, email: em, whatsapp: zap.value, utm_source: q.get('utm_source') || '', utm_medium: q.get('utm_medium') || '',
-      utm_campaign: q.get('utm_campaign') || '', utm_content: q.get('utm_content') || '', pagina: location.href.split('?')[0]});
-    try {
-      const blob = new Blob([lead], {type: 'text/plain;charset=UTF-8'});
-      if (!(navigator.sendBeacon && navigator.sendBeacon(LEADS, blob)))
-        fetch(LEADS, {method: 'POST', mode: 'no-cors', keepalive: true, headers: {'Content-Type': 'text/plain;charset=UTF-8'}, body: lead});
-    } catch(_){}
+    const dados = {id: Date.now().toString(36) + Math.random().toString(36).slice(2, 8), nome: n, email: em, whatsapp: zap.value,
+      utm_source: q.get('utm_source') || '', utm_medium: q.get('utm_medium') || '', utm_campaign: q.get('utm_campaign') || '',
+      utm_content: q.get('utm_content') || '', pagina: location.href.split('?')[0]};
     const u = new URL(CHECKOUT);
     u.searchParams.set('name', n); u.searchParams.set('email', em); u.searchParams.set('phone', dz);
-    new URLSearchParams(location.search).forEach((v, k) => { if (!u.searchParams.has(k)) u.searchParams.set(k, v); });   // repassa UTMs
-    location.href = u.toString();
+    q.forEach((v, k) => { if (!u.searchParams.has(k)) u.searchParams.set(k, v); });   // repassa UTMs
+    const btn = f.querySelector('button[type=submit]'), txt = btn.innerHTML;
+    btn.disabled = true; btn.querySelector('span').textContent = 'Indo para o pagamento…';
+    let foi = false; const ir = () => { if (foi) return; foi = true; location.href = u.toString(); };
+    const reserva = () => {   // se o POST falhar: beacon + GET por imagem invisível
+      try { navigator.sendBeacon && navigator.sendBeacon(LEADS, new Blob([JSON.stringify(dados)], {type: 'text/plain;charset=UTF-8'})); } catch(_){}
+      return new Promise(r => { const im = new Image(); im.onload = im.onerror = r; im.src = LEADS + '?' + new URLSearchParams(dados).toString(); setTimeout(r, 2500); });
+    };
+    const espera = new Promise(r => setTimeout(() => r('tempo'), 4000));
+    Promise.race([
+      fetch(LEADS, {method: 'POST', mode: 'no-cors', keepalive: true, headers: {'Content-Type': 'text/plain;charset=UTF-8'}, body: JSON.stringify(dados)})
+        .then(() => 'ok', () => reserva()),
+      espera.then(() => reserva())
+    ]).then(ir, ir);
+    setTimeout(ir, 7000);   // nunca prende a pessoa: no máximo 7 s e segue pro checkout
+    addEventListener('pageshow', ev => { if (ev.persisted) { btn.disabled = false; btn.innerHTML = txt; foi = false; } });
   });
 })();
 
