@@ -216,9 +216,9 @@ footer .logo{font-size:20px;color:var(--mut)}
 .barra .btn{padding:12px 18px;font-size:15px}
 
 /* entrada ao rolar */
-.rv{opacity:0;transform:translateY(16px);transition:opacity .5s ease-out,transform .5s ease-out}
+.rv{opacity:0;transform:scale(.82);transition:opacity .7s ease,transform 1s cubic-bezier(.16,1,.3,1)}
 .rv.vis{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}.btn .seta,.abas a::after,.barra{transition:none}}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;filter:none;transform:none;transition:none}.btn .seta,.abas a::after,.barra{transition:none}}
 
 
 /* bloco padrão: título grande em 2 linhas + print embaixo */
@@ -294,6 +294,15 @@ body.ck-aberto{overflow:hidden}
 .faq-ig p{color:var(--soft)}
 @media (max-width:760px){.top .btn-ig span{display:none}.top .btn-ig{padding:11px}}
 
+/* entrada do topo: poeira de luz forma a estrela (#7) — animada por JS logo abaixo do hero */
+.hero.intro .logo-hero,.hero.intro h1,.hero.intro .lead,.hero.intro .cadeia li,.hero.intro .acoes{opacity:0}
+.hero .logo-hero:not(.halo-on)::before{opacity:0!important}
+.logo-hero .L{display:inline-block}
+/* giro da estrela e pulso do brilho só começam quando a entrada termina (sem pulo) */
+.logo-hero.espera-st .li svg{animation:none!important}
+.logo-hero.espera-br{animation:none!important}
+.logo-hero .po{position:absolute;left:50%;top:15%;border-radius:50%;background:#fff;box-shadow:0 0 8px #fff;pointer-events:none}
+
 /* respiro entre a print do Painel e a oferta (fundo claro) */
 #painel{padding-bottom:calc(var(--s10) - 40px) !important}
 
@@ -345,7 +354,7 @@ img.tela{border:3px solid #F5F5F5 !important;border-radius:18px !important;box-s
 
 <main id="topo">
 
-<section class="hero">
+<section class="hero intro">
   <div class="wrap">
     <p class="logo logo-hero" aria-label="genie">gen<span class="li">ı<svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg></span>e</p>
     <h1>Crie Canais Dark 100% Automáticos</h1>
@@ -359,6 +368,50 @@ img.tela{border:3px solid #F5F5F5 !important;border-radius:18px !important;box-s
     </div>
   </div>
 </section>
+<script>
+// entrada do topo (#7 poeira de luz): pontinhos se juntam no ı formando a estrela, ela brilha, as letras surgem em volta e o resto sobe
+(function(){
+  var h=document.querySelector('.hero'),logo=h&&h.querySelector('.logo-hero');if(!logo)return;
+  // embrulha cada letra (mantém o span do ı com a estrela)
+  [].slice.call(logo.childNodes).forEach(function(n){if(n.nodeType===3){var f=document.createDocumentFragment();
+    n.textContent.split('').forEach(function(c){var sp=document.createElement('span');sp.className='L';sp.textContent=c;f.appendChild(sp)});logo.replaceChild(f,n)}});
+  var li=logo.querySelector('.li');li.classList.add('L');
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches||!logo.animate){h.classList.remove('intro');return;}
+  logo.classList.add('espera-st','espera-br');
+  var EO='cubic-bezier(.16,1,.3,1)',EIO='cubic-bezier(.65,0,.35,1)',ST='translateX(-50%)';
+  function A(el,kf,o){o.fill='backwards';if(!o.easing)o.easing=EO;return el.animate(kf,o)}
+  var L=[].slice.call(logo.querySelectorAll('.L')),st=li.querySelector('svg'),fs=parseFloat(getComputedStyle(logo).fontSize)/170;
+  var mob=innerWidth<720,N=mob?18:26;
+  A(logo,[{opacity:1},{opacity:1}],{duration:1});
+  // poeira
+  for(var i=0;i<N;i++){var d=document.createElement('i');d.className='po';var sz=(3+Math.random()*4)*Math.max(.7,fs);d.style.width=d.style.height=sz+'px';li.appendChild(d);
+    var a=Math.random()*Math.PI*2,R=(260+Math.random()*320)*fs;
+    var an=d.animate([{opacity:0,transform:'translate('+Math.cos(a)*R+'px,'+Math.sin(a)*R+'px)'},{opacity:1,offset:.3},{opacity:1,transform:'translate(-50%,-50%)',offset:.95},{opacity:0,transform:'translate(-50%,-50%)'}],{duration:1500,delay:100+Math.random()*400,easing:EIO,fill:'both'});
+    an.onfinish=(function(x){return function(){x.remove()}})(d);}
+  // estrela nasce da poeira
+  A(st,[{opacity:0,transform:ST+' scale(.3)'},{opacity:1,transform:ST+' scale(1.4)',offset:.5},{opacity:1,transform:ST+' scale(1)'}],{duration:800,delay:1500});
+  // haste do ı acende junto com a estrela; depois as letras de dentro pra fora
+  var cor=getComputedStyle(logo).color;st.style.color=cor;
+  A(li,[{color:'transparent'},{color:cor}],{duration:700,delay:1700});
+  [2,4,1,0].forEach(function(ix,k){if(L[ix]&&L[ix]!==li)A(L[ix],[{opacity:0,filter:'blur(8px)'},{opacity:1,filter:'blur(0)'}],{duration:800,delay:1800+k*120})});
+  // flash de brilho quando a estrela acende
+  logo.animate([{filter:'drop-shadow(0 0 0 rgba(255,255,255,0))'},{filter:'drop-shadow(0 0 28px rgba(255,255,255,.85)) drop-shadow(0 0 70px rgba(255,255,255,.35))',offset:.35},{filter:'drop-shadow(0 0 6px rgba(255,255,255,.18)) drop-shadow(0 0 22px rgba(255,255,255,.08))'}],{duration:1400,delay:1700,easing:'ease-out'});
+  // resto do topo
+  var t=2400;
+  function up(el,d,dist){if(el)A(el,[{opacity:0,transform:'translateY('+(dist||22)+'px)'},{opacity:1,transform:'none'}],{duration:800,delay:d})}
+  up(h.querySelector('h1'),t);up(h.querySelector('.lead'),t+160);
+  var cad=[].slice.call(h.querySelectorAll('.cadeia li'));
+  cad.forEach(function(x,k){A(x,[{opacity:0,transform:'translateY(10px)'},{opacity:1,transform:'none'}],{duration:500,delay:t+380+k*90})});
+  up(h.querySelector('.acoes'),t+380+cad.length*90+100,16);
+  h.classList.remove('intro');
+  // estrela termina reta e parada (scale 1, 0°) = mesmo quadro inicial do giro: libera o giro exatamente aí
+  setTimeout(function(){logo.classList.remove('espera-st')},2300);
+  setTimeout(function(){logo.classList.remove('espera-br')},3100);
+  // halo de trás só depois da estrela acender
+  setTimeout(function(){logo.classList.add('halo-on')},1700);
+})();
+</script>
+
 
 <section class="bloco" id="ideias" data-aba>
   <div class="wrap">
@@ -575,7 +628,8 @@ const LEADS = 'https://script.google.com/macros/s/AKfycbxhfEGRzCf6aUhaePPYpmrO7G
   if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('vis')});return;}
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('vis');io.unobserve(e.target);}});},{rootMargin:'0px 0px -8% 0px'});
   els.forEach(function(e){io.observe(e)});
-  setTimeout(function(){els.forEach(function(e){e.classList.add('vis')})},3500);
+  // garantia: só revela o que já ficou ACIMA da tela (ex.: pulo por âncora), nunca o que ainda vem abaixo
+  addEventListener('scroll',function(){els.forEach(function(e){if(!e.classList.contains('vis')&&e.getBoundingClientRect().bottom<0)e.classList.add('vis')})},{passive:true});
 })();
 
 // prévias dos estilos tocam só quando aparecem
