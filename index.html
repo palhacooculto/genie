@@ -303,6 +303,17 @@ body.ck-aberto{overflow:hidden}
 .logo-hero.espera-br{animation:none!important}
 .logo-hero .po{position:absolute;left:50%;top:15%;border-radius:50%;background:#fff;box-shadow:0 0 8px #fff;pointer-events:none}
 
+/* botão de compra do topo: maior, verde, brilho verde e feixe */
+.hero h1{max-width:none;font-size:clamp(1.9rem,3.45vw,3.2rem)}
+.hero .acoes .btn-pri{background:#39FF6A;color:#03200C;font-size:1.25rem;padding:20px 40px;gap:12px;
+  animation:btn-verde 3.2s ease-in-out infinite;box-shadow:0 0 0 1px rgba(57,255,106,.5),0 0 26px rgba(57,255,106,.45)}
+.hero .acoes .btn-pri:hover{background:#5CFF85}
+.hero .acoes .btn-pri::after{animation:feixe 3.2s ease-in-out infinite;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25) 30%,rgba(255,255,255,.95) 50%,rgba(255,255,255,.25) 70%,transparent)}
+@keyframes btn-verde{0%,100%{box-shadow:0 0 0 1px rgba(57,255,106,.5),0 0 22px rgba(57,255,106,.35),0 0 60px rgba(57,255,106,.12)}50%{box-shadow:0 0 0 1px rgba(120,255,150,.8),0 0 36px rgba(57,255,106,.65),0 0 90px rgba(57,255,106,.28)}}
+.hero .preco-mini{font-size:1.2rem}
+.hero .preco-mini b{font-size:1.45rem}
+@media (prefers-reduced-motion:reduce){.hero .acoes .btn-pri,.hero .acoes .btn-pri::after{animation:none}}
+
 /* respiro entre a print do Painel e a oferta (fundo claro) */
 #painel{padding-bottom:calc(var(--s10) - 40px) !important}
 
@@ -357,7 +368,7 @@ img.tela{border:3px solid #F5F5F5 !important;border-radius:18px !important;box-s
 <section class="hero intro">
   <div class="wrap">
     <p class="logo logo-hero" aria-label="genie">gen<span class="li">ı<svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg></span>e</p>
-    <h1>Crie Canais Dark 100% Automáticos</h1>
+    <h1>R$3.000 Por Mês. 1 Hora por dia. Zero edição.<br>Canais Dark 100% Automáticos</h1>
     <p class="lead">Um software para canais do YouTube: caça vídeos que bombaram em qualquer nicho e produz o vídeo completo 100% no automático e no estilo que você decidir.</p>
     <ol class="cadeia" aria-label="O que o Genie faz em cada vídeo">
       <li>Roteiro</li><li>Voz</li><li>Edição</li><li>Thumbnail</li><li>Título</li><li>SEO</li><li>Postagem</li>
