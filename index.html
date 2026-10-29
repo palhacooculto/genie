@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Genie</title>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Genie">
+<meta property="og:title" content="Genie">
+<meta property="og:description" content="Software para canais do YouTube: caça vídeos que bombaram e produz o vídeo completo 100% no automático.">
+<meta property="og:url" content="https://palhacooculto.github.io/genie/">
+<meta property="og:image" content="https://palhacooculto.github.io/genie/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="675">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://palhacooculto.github.io/genie/og.jpg">
+<meta name="description" content="O Genie roda dentro do Hermes: caça vídeos que explodiram em canais pequenos, produz no estilo de cada canal, agenda no YouTube e mostra quanto cada canal rende.">
+<meta name="theme-color" content="#0A0A0A">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Poppins:wght@600&display=swap">
+<style>
+:root{
+  color-scheme:dark;
+  /* tokens = tema Monocromo do próprio Genie (genie-tema.js) */
+  --bg:#0A0A0A; --panel:#121212; --chip:#1C1C1C; --line:#262626; --mut:#8C8C8C; --soft:#B5B5B5; --ink:#F5F5F5; --ac:#FFFFFF; --acink:#0A0A0A;
+  --f-txt:Geist,system-ui,sans-serif; --f-mono:'Geist Mono',ui-monospace,monospace;
+  /* escala 1.25 */
+  --t-xs:.8rem; --t-sm:.9rem; --t-md:1.0625rem; --t-lg:1.25rem; --t-xl:1.5625rem; --t-2xl:clamp(1.9rem,3.2vw,2.45rem); --t-3xl:clamp(2.5rem,5.4vw,4.3rem);
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px; --s8:64px; --s9:96px; --s10:128px;
+  --r-ctl:999px; --r-box:14px; --r-media:10px;
+  --wrap:1200px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-txt);font-size:var(--t-md);line-height:1.6;-webkit-font-smoothing:antialiased}
+img,video{display:block;max-width:100%;height:auto}
+a{color:inherit}
+h1,h2,h3{margin:0;font-weight:600;line-height:1.08;letter-spacing:-.025em;text-wrap:balance}
+p{margin:0;text-wrap:pretty}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 var(--s5)}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.mut{color:var(--mut)}
+:focus-visible{outline:2px solid var(--ac);outline-offset:3px;border-radius:4px}
+
+/* logo (igual ao do app: gen ı✦ e) */
+.logo{display:inline-flex;align-items:center;font-family:Poppins,system-ui,sans-serif;font-weight:600;font-size:28px;line-height:1;letter-spacing:-.01em;color:var(--ink);text-decoration:none;white-space:nowrap}
+.logo .li{position:relative;display:inline-block}
+.logo .li svg{position:absolute;left:var(--sx,50%);top:-.08em;width:.36em;height:.36em;transform:translateX(-50%)}
+
+/* botões */
+.btn{display:inline-flex;align-items:center;gap:10px;border-radius:var(--r-ctl);padding:15px 26px;font:600 1rem/1 var(--f-txt);text-decoration:none;cursor:pointer;border:1px solid transparent;transition:background-color .2s ease,color .2s ease,border-color .2s ease}
+.btn-pri{background:var(--ac);color:var(--acink)}
+.btn-pri:hover{background:#D9D9D9}
+.btn-sec{border-color:var(--line);color:var(--ink)}
+.btn-sec:hover{border-color:#5A5A5A}
+.btn .seta{transition:transform .2s ease}
+.btn:hover .seta{transform:translateX(3px)}
+
+/* topo = a barra do próprio Genie */
+.top{position:sticky;top:0;z-index:40;background:rgba(10,10,10,.94);border-bottom:1px solid var(--line)}
+.top .wrap{height:64px;display:flex;align-items:center;gap:40px}
+.abas{display:flex;gap:28px;height:100%}
+.abas a{position:relative;display:flex;align-items:center;color:var(--mut);text-decoration:none;font-size:14px;font-weight:500;transition:color .2s ease}
+.abas a:hover,.abas a.on{color:var(--ink)}
+.abas a.on{font-weight:600}
+.abas a::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--ac);border-radius:2px;transform:scaleX(0);transition:transform .25s ease}
+.abas a.on::after{transform:scaleX(1)}
+.top .btn{margin-left:auto;padding:10px 18px;font-size:14px}
+
+/* hero */
+.hero{padding:var(--s9) 0 var(--s4);overflow:hidden;text-align:center}
+.logo-hero{display:flex;justify-content:center;margin:0 auto;font-size:clamp(5.5rem,15vw,12rem);letter-spacing:-.035em;line-height:.9}
+.hero h1{margin:var(--s8) auto 0;font-size:clamp(2.1rem,4.4vw,3.6rem);max-width:18ch}
+.hero .lead{margin:var(--s5) auto 0;font-size:var(--t-lg);color:var(--soft);max-width:52ch;line-height:1.5}
+.cadeia{list-style:none;margin:var(--s6) auto 0;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:var(--s2) 0;font-size:var(--t-sm);font-weight:500}
+.cadeia li{display:flex;align-items:center;color:var(--ink)}
+.cadeia li:not(:last-child)::after{content:'→';color:var(--mut);margin:0 var(--s3);font-family:var(--f-mono)}
+.hero .acoes{margin-top:var(--s7);display:flex;flex-direction:column;align-items:center;gap:var(--s3)}
+.hero .preco-mini{font-size:var(--t-sm);color:var(--mut)}
+.hero .preco-mini b{color:var(--ink);font-weight:600}
+.hero-tela{margin-top:var(--s8)}
+.hero .tela{width:100%;box-shadow:0 40px 80px -30px rgba(0,0,0,.9)}
+
+/* trilha das 4 abas */
+.trilha{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--panel)}
+.trilha ol{list-style:none;margin:0 auto;padding:0;display:grid;grid-template-columns:repeat(4,1fr);max-width:var(--wrap)}
+.trilha li{padding:var(--s6) var(--s5);border-left:1px solid var(--line)}
+.trilha li:first-child{border-left:0}
+.trilha b{display:block;font-size:var(--t-lg);font-weight:600}
+.trilha span{display:block;margin-top:4px;font-size:var(--t-sm);color:var(--mut)}
+
+/* seções das abas */
+.aba{padding:var(--s10) 0}
+.aba-tag{display:inline-block;font-size:14px;font-weight:600;padding-bottom:10px;border-bottom:2px solid var(--ac);margin-bottom:var(--s5)}
+.aba h2{font-size:var(--t-2xl);max-width:20ch}
+.aba .txt>p{margin-top:var(--s4);color:var(--soft);max-width:52ch}
+.lista{list-style:none;margin:var(--s6) 0 0;padding:0;display:grid;gap:var(--s4);max-width:56ch}
+.lista li{padding-left:22px;position:relative;color:var(--soft)}
+.lista li::before{content:'';position:absolute;left:0;top:.72em;width:10px;height:1px;background:var(--mut)}
+.lista b{color:var(--ink);font-weight:600}
+
+.split{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:var(--s8);align-items:start}
+.split.inv{grid-template-columns:minmax(0,7fr) minmax(0,5fr)}
+.split.inv .txt{order:2}
+.formula{margin-top:var(--s6);border:1px solid var(--line);border-radius:var(--r-box);padding:var(--s5);background:var(--panel)}
+.formula .eq{font-family:var(--f-mono);font-size:var(--t-sm);color:var(--ink)}
+.formula .ex{margin-top:var(--s4);display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;font-size:var(--t-xs);color:var(--mut)}
+.chip{font-family:var(--f-mono);border:1px solid var(--line);background:var(--chip);color:var(--ink);border-radius:6px;padding:2px 7px}
+.formula .ex p{flex-basis:100%;font-size:var(--t-sm);color:var(--soft)}
+.legenda{margin-top:var(--s3);font-size:var(--t-xs);color:var(--mut)}
+
+/* moldes: print largo + estilos */
+.aba-moldes .topo-txt{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:var(--s8);align-items:end;margin-bottom:var(--s7)}
+.aba-moldes .topo-txt p{color:var(--soft)}
+.estilos{margin-top:var(--s9)}
+.estilos-cab{display:flex;align-items:baseline;justify-content:space-between;gap:var(--s5);flex-wrap:wrap;margin-bottom:var(--s5)}
+.estilos-cab h3{font-size:var(--t-xl)}
+.estilos-cab{flex-direction:column;align-items:flex-start;gap:var(--s4);margin-bottom:var(--s7)}
+.aprende{font-size:var(--t-2xl)!important;max-width:24ch;line-height:1.12}
+.aprende em{font-style:normal;text-transform:uppercase;text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:6px}
+.estilos-cab p{color:var(--mut);font-size:var(--t-sm);max-width:52ch}
+.fita{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:var(--s5) var(--s3)}
+.fita figure{margin:0}
+.fita video{width:100%;aspect-ratio:9/16;object-fit:cover;border-radius:var(--r-media);background:var(--chip)}
+.fita figcaption{margin-top:var(--s2);font-size:var(--t-xs);color:var(--soft)}
+
+/* painel */
+.aba-painel{background:var(--panel);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.aba-painel .tela{background:var(--bg)}
+.tres{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s6);margin-top:var(--s7);padding-top:var(--s6);border-top:1px solid var(--line)}
+.tres h3{font-size:var(--t-md);font-weight:600;letter-spacing:-.01em}
+.tres p{margin-top:var(--s2);font-size:var(--t-sm);color:var(--mut)}
+
+/* como funciona */
+.como{padding:var(--s10) 0}
+.como-grid{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:var(--s8)}
+.como h2{font-size:var(--t-2xl)}
+.chat{border:1px solid var(--line);border-radius:var(--r-box);background:var(--panel);padding:var(--s5);display:grid;gap:var(--s3);font-size:var(--t-sm)}
+.chat .msg{max-width:78%;padding:10px 14px;border-radius:12px;line-height:1.45}
+.chat .eu{justify-self:end;background:var(--chip);border:1px solid var(--line)}
+.chat .ia{background:transparent;color:var(--soft);padding-left:0}
+.chat code{font-family:var(--f-mono);font-size:.92em;color:var(--ink)}
+.passos{margin-top:var(--s6);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s5)}
+.passos div{border-top:1px solid var(--line);padding-top:var(--s4)}
+.passos b{display:block;font-weight:600}
+.passos p{margin-top:6px;font-size:var(--t-sm);color:var(--mut)}
+
+/* pra quem é */
+.quem{padding:0 0 var(--s10)}
+.quem-grid{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:var(--r-box);overflow:hidden}
+.quem-grid>div{padding:var(--s6)}
+.quem-grid>div+div{border-left:1px solid var(--line);background:var(--panel)}
+.quem h3{font-size:var(--t-lg)}
+.quem ul{list-style:none;margin:var(--s4) 0 0;padding:0;display:grid;gap:var(--s3);color:var(--soft);font-size:var(--t-sm)}
+.quem li{padding-left:22px;position:relative}
+.quem .sim li::before{content:'+';position:absolute;left:0;font-family:var(--f-mono);color:var(--ink)}
+.quem .nao li::before{content:'–';position:absolute;left:0;font-family:var(--f-mono);color:var(--mut)}
+
+/* autor */
+.autor{padding:var(--s9) 0;border-top:1px solid var(--line)}
+.autor-grid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:var(--s8);align-items:center}
+.autor blockquote{margin:0;font-size:var(--t-2xl);font-weight:500;letter-spacing:-.02em;line-height:1.2;text-wrap:balance}
+.autor cite{display:block;margin-top:var(--s5);font-style:normal;font-size:var(--t-sm);color:var(--mut)}
+.autor .numeros{display:grid;gap:var(--s4)}
+.autor .numeros div{display:flex;justify-content:space-between;align-items:baseline;gap:var(--s4);border-bottom:1px solid var(--line);padding-bottom:var(--s3)}
+.autor .numeros b{font-family:var(--f-mono);font-size:var(--t-xl);font-weight:500}
+.autor .numeros span{font-size:var(--t-sm);color:var(--mut);text-align:right}
+
+/* oferta */
+.oferta{padding:var(--s10) 0;background:var(--ink);color:var(--acink)}
+.oferta-grid{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:var(--s8);align-items:start}
+.oferta h2{font-size:var(--t-3xl)}
+.oferta .inclui{list-style:none;margin:var(--s6) 0 0;padding:0;display:grid;gap:0}
+.oferta .inclui li{padding:var(--s3) 0;border-top:1px solid #D4D4D4;display:flex;justify-content:space-between;gap:var(--s4)}
+.oferta .inclui li span{color:#5C5C5C;font-size:var(--t-sm);text-align:right}
+.caixa{background:var(--bg);color:var(--ink);border-radius:var(--r-box);padding:var(--s6)}
+.caixa .de{font-size:var(--t-sm);color:var(--mut)}
+.caixa .valor{margin-top:var(--s2);font-size:clamp(3rem,6vw,4.4rem);font-weight:600;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+.caixa .valor small{font-size:.38em;font-weight:500;letter-spacing:0;color:var(--mut);margin-right:6px;vertical-align:.95em}
+.caixa .parc{margin-top:var(--s2);font-size:var(--t-lg);color:var(--soft)}
+.caixa .btn{margin-top:var(--s6);width:100%;justify-content:center;padding:18px}
+.caixa .garantia{margin-top:var(--s5);padding-top:var(--s5);border-top:1px solid var(--line);font-size:var(--t-sm);color:var(--soft)}
+.caixa .garantia b{color:var(--ink)}
+
+/* faq */
+.faq{padding:var(--s10) 0 calc(var(--s10) + 40px)}
+.faq-grid{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:var(--s8)}
+.faq h2{font-size:var(--t-2xl)}
+details{border-top:1px solid var(--line)}
+details:last-child{border-bottom:1px solid var(--line)}
+summary{list-style:none;cursor:pointer;padding:var(--s5) 40px var(--s5) 0;position:relative;font-weight:600;font-size:var(--t-md)}
+summary::-webkit-details-marker{display:none}
+summary::after{content:'+';position:absolute;right:4px;top:50%;transform:translateY(-50%);font-family:var(--f-mono);color:var(--mut);font-weight:400;font-size:1.3rem}
+details[open] summary::after{content:'–'}
+details p{padding:0 0 var(--s5);color:var(--soft);max-width:64ch}
+
+/* final */
+.final{padding:var(--s10) 0;border-top:1px solid var(--line);text-align:center}
+.final h2{font-size:var(--t-3xl);max-width:16ch;margin:0 auto}
+.final p{margin:var(--s5) auto 0;color:var(--soft);max-width:44ch}
+.final .btn{margin-top:var(--s6)}
+footer{border-top:1px solid var(--line);padding:var(--s6) 0;font-size:var(--t-xs);color:var(--mut)}
+footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:var(--s4);flex-wrap:wrap}
+footer .logo{font-size:20px;color:var(--mut)}
+
+/* barra de compra no celular */
+.barra{position:fixed;left:0;right:0;bottom:0;z-index:50;display:none;align-items:center;justify-content:space-between;gap:var(--s3);padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:rgba(10,10,10,.97);border-top:1px solid var(--line);transform:translateY(110%);transition:transform .25s ease}
+.barra.on{transform:none}
+.barra b{font-size:var(--t-lg)}
+.barra span{display:block;font-size:var(--t-xs);color:var(--mut)}
+.barra .btn{padding:12px 18px;font-size:15px}
+
+/* entrada ao rolar */
+.rv{opacity:0;transform:translateY(16px);transition:opacity .5s ease-out,transform .5s ease-out}
+.rv.vis{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}.btn .seta,.abas a::after,.barra{transition:none}}
+
+
+/* bloco padrão: título grande em 2 linhas + print embaixo */
+.bloco{padding:var(--s10) 0 0}
+.bloco .cab{margin-bottom:var(--s7);display:flex;flex-direction:column;gap:var(--s4)}
+.bloco h2{font-size:var(--t-2xl);max-width:none;line-height:1.12}
+.bloco h2 em{font-style:normal;text-transform:uppercase;text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:6px}
+.bloco .cab p{color:var(--mut);font-size:var(--t-md);max-width:60ch}
+.bloco .cab p b{color:var(--ink);font-weight:600}
+.bloco .chat{max-width:760px}
+.quem{padding-top:var(--s10)!important}
+
+
+/* ---- brilho da logo + feixe de luz nos botões de comprar ---- */
+.logo-hero{position:relative;isolation:isolate;animation:logo-brilho 4.8s ease-in-out infinite}
+.logo-hero::before{content:'';position:absolute;z-index:-1;left:50%;top:52%;width:1.9em;height:1.1em;transform:translate(-50%,-50%);
+  background:radial-gradient(closest-side,rgba(255,255,255,.16),rgba(255,255,255,.05) 55%,transparent);animation:halo 4.8s ease-in-out infinite;pointer-events:none}
+.logo-hero .li svg{animation:estrela 9.6s ease-in-out infinite;transform-origin:50% 50%}
+@keyframes logo-brilho{0%,100%{filter:drop-shadow(0 0 6px rgba(255,255,255,.18)) drop-shadow(0 0 22px rgba(255,255,255,.08))}
+  50%{filter:drop-shadow(0 0 12px rgba(255,255,255,.42)) drop-shadow(0 0 48px rgba(255,255,255,.18))}}
+@keyframes halo{0%,100%{opacity:.55;transform:translate(-50%,-50%) scale(.94)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.06)}}
+/* ciclo 1 gira pra esquerda, ciclo 2 pra direita (a estrela tem 4 pontas: 90° = volta ao desenho inicial) */
+@keyframes estrela{0%{transform:translateX(-50%) scale(1) rotate(0deg)}25%{transform:translateX(-50%) scale(1.18) rotate(-45deg)}50%{transform:translateX(-50%) scale(1) rotate(-90deg)}75%{transform:translateX(-50%) scale(1.18) rotate(-45deg)}100%{transform:translateX(-50%) scale(1) rotate(0deg)}}
+.btn-pri{position:relative;overflow:hidden;isolation:isolate;background:#F2F2F2;animation:btn-aura 4.2s ease-in-out infinite}
+.btn-pri::after{content:'';position:absolute;z-index:1;top:-20%;bottom:-20%;left:-60%;width:42%;pointer-events:none;transform:skewX(-22deg);
+  background:linear-gradient(90deg,transparent,rgba(0,0,0,.07) 30%,#fff 50%,rgba(0,0,0,.07) 70%,transparent);animation:feixe 4.2s ease-in-out infinite}
+.btn-pri>*{position:relative;z-index:2}
+@keyframes feixe{0%,62%{left:-60%}88%,100%{left:125%}}
+@keyframes btn-aura{0%,60%,100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}78%{box-shadow:0 0 22px 2px rgba(255,255,255,.28)}}
+@media (prefers-reduced-motion:reduce){.logo-hero,.logo-hero::before,.logo-hero .li svg,.btn-pri,.btn-pri::after{animation:none}}
+
+
+/* ---- pop-up do checkout ---- */
+.ck{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:var(--s5);background:rgba(0,0,0,.72)}
+.ck.on{display:flex;animation:ck-fundo .25s ease-out}
+.ck-box{position:relative;width:100%;max-width:400px;background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:var(--s7) var(--s6) var(--s6);
+  box-shadow:0 30px 80px -20px rgba(0,0,0,.9);animation:ck-entra .3s ease-out}
+.ck-x{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:50%;border:0;background:transparent;color:var(--mut);font-size:22px;line-height:1;cursor:pointer}
+.ck-x:hover{color:var(--ink);background:var(--chip)}
+.ck .logo{display:flex;justify-content:center;font-size:52px;margin:0 auto var(--s6)}
+.ck form{display:grid;gap:var(--s4)}
+.ck label{display:grid;gap:6px;font-size:var(--t-sm);color:var(--soft);font-weight:500}
+.ck input{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:14px 16px;font:500 1rem/1.2 var(--f-txt);color:var(--ink);outline:none;transition:border-color .2s ease}
+.ck input::placeholder{color:#5c5c5c}
+.ck input:focus{border-color:var(--ink)}
+.ck input[aria-invalid="true"]{border-color:#E5484D}
+.ck .erro{min-height:1.2em;margin:-4px 0 0;font-size:var(--t-xs);color:#E5484D}
+.ck .btn{margin-top:var(--s2);width:100%;justify-content:center;padding:17px}
+.ck .seguro{margin-top:var(--s4);text-align:center;font-size:var(--t-xs);color:var(--mut)}
+@keyframes ck-fundo{from{opacity:0}to{opacity:1}}
+@keyframes ck-entra{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.ck.on,.ck-box{animation:none}}
+body.ck-aberto{overflow:hidden}
+.ck .btn-pri{animation:btn-aura 2.8s ease-in-out .3s infinite}
+.ck .btn-pri::after{animation:feixe-ck 2.8s ease-in-out .3s infinite}
+@keyframes feixe-ck{0%{left:-60%}38%,100%{left:125%}}
+@media (prefers-reduced-motion:reduce){.ck .btn-pri,.ck .btn-pri::after{animation:none}}
+
+
+.x12{font-size:.68em;font-weight:500;margin-right:.18em;letter-spacing:0;vertical-align:baseline}
+.caixa .valor .x12{font-size:.4em;color:var(--soft);vertical-align:.55em;margin-right:.12em}
+
+.faq .custos{list-style:none;margin:10px 0;padding:0;display:grid;gap:6px;color:var(--soft)}
+.faq .custos b{color:var(--ink)}
+.faq details p+p{margin-top:10px}
+
+.top .btn-pri,.top .btn-pri::after{animation:none}
+.top-acoes{display:flex;gap:10px;align-items:center;margin-left:auto}
+.top-acoes .btn{margin-left:0}
+.btn-ig{gap:8px}.btn-ig .ig{width:17px;height:17px}
+.top .btn{padding:11px 18px;font-size:.9rem}
+.faq-ig{margin-top:var(--s6);padding-top:var(--s5);border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:var(--s4);align-items:center;justify-content:space-between}
+.faq-ig p{color:var(--soft)}
+@media (max-width:760px){.top .btn-ig span{display:none}.top .btn-ig{padding:11px}}
+
+/* responsivo */
+@media (max-width:1000px){
+  .hero-grid,.split,.split.inv,.aba-moldes .topo-txt,.como-grid,.autor-grid,.oferta-grid,.faq-grid{grid-template-columns:1fr;gap:var(--s6)}
+  .split.inv .txt{order:0}
+  .fita{grid-template-columns:repeat(5,minmax(0,1fr))}
+  .trilha ol{grid-template-columns:repeat(2,1fr)}
+  .trilha li:nth-child(3){border-left:0}
+  .trilha li:nth-child(n+3){border-top:1px solid var(--line)}
+}
+@media (max-width:720px){
+  :root{--s9:64px;--s10:80px}
+  .abas{display:none}
+  .hero{padding-top:var(--s7)}
+  .hero .lead{font-size:var(--t-md)}
+  .tres,.passos{grid-template-columns:1fr;gap:var(--s5)}
+  .quem-grid{grid-template-columns:1fr}
+  .quem-grid>div+div{border-left:0;border-top:1px solid var(--line)}
+  .fita{grid-template-columns:repeat(14,58%);overflow-x:auto;scroll-snap-type:x mandatory;margin-right:calc(-1 * var(--s5));padding-right:var(--s5)}
+  .fita figure{scroll-snap-align:start}
+  .barra{display:flex}
+  footer{padding-bottom:96px}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#topo" aria-label="genie">gen<span class="li" id="logo-i">ı<svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg></span>e</a>
+    <nav class="abas" aria-label="Abas do Genie">
+      <a href="#ideias">Ideias</a>
+      <a href="#moldes">Moldes</a>
+      <a href="#upload">Upload</a>
+      <a href="#painel">Painel</a>
+    </nav>
+    <div class="top-acoes">
+      <a class="btn btn-sec btn-ig" href="https://www.instagram.com/palhacooculto/" target="_blank" rel="noopener"><svg class="ig" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></svg><span>Suporte Instagram</span></a>
+      <a class="btn btn-pri" href="#oferta" data-cta><span>Quero o Genie</span></a>
+    </div>
+  </div>
+</header>
+
+<main id="topo">
+
+<section class="hero">
+  <div class="wrap">
+    <p class="logo logo-hero" aria-label="genie">gen<span class="li">ı<svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg></span>e</p>
+    <h1>Crie Canais Dark 100% Automáticos</h1>
+    <p class="lead">Um software para canais do YouTube: caça vídeos que bombaram em qualquer nicho e produz o vídeo completo 100% no automático e no estilo que você decidir.</p>
+    <ol class="cadeia" aria-label="O que o Genie faz em cada vídeo">
+      <li>Roteiro</li><li>Voz</li><li>Edição</li><li>Thumbnail</li><li>Título</li><li>SEO</li><li>Postagem</li>
+    </ol>
+    <div class="acoes">
+      <a class="btn btn-pri" href="#oferta" data-cta><span>Quero o Genie </span><span class="seta" aria-hidden="true">→</span></a>
+      <p class="preco-mini"><b><small class="x12">12x</small>R$97</b> · acesso vitalício</p>
+    </div>
+  </div>
+</section>
+
+<section class="bloco" id="ideias" data-aba>
+  <div class="wrap">
+    <div class="cab rv">
+      <h2>Ache o vídeo que já explodiu.<br>Em qualquer nicho.</h2>
+      <p>Você escreve o nicho e clica em Caçar. O Genie caça por todo YouTube e devolve vídeos que bombaram muito acima da média.</p>
+    </div>
+    <img class="tela rv" src="img/ideas-zoom.webp" width="1600" height="867" loading="lazy" alt="Caçada com vídeos gringos de vários nichos e o multiplicador de outlier de cada um">
+  </div>
+</section>
+
+<section class="bloco" id="moldes" data-aba>
+  <div class="wrap">
+    <div class="cab rv">
+      <h2>Cada canal tem o seu molde.<br>O Genie nunca esquece o estilo.</h2>
+      <p>Nicho, tom, edição, thumbnail e produto de cada canal ficam guardados. Todo vídeo segue o molde do jeito que você mandar.</p>
+    </div>
+    <img class="tela rv" src="img/moldes-canais.webp" width="2000" height="492" loading="lazy" alt="Aba Moldes: seis canais, cada um com a sua ficha">
+  </div>
+</section>
+
+<section class="bloco bloco-estilos">
+  <div class="wrap">
+    <div class="cab rv">
+      <h2>O Genie consegue aprender a editar em <em>qualquer</em> estilo.<br>Você manda, ele aprende.</h2>
+      <p>Mande um vídeo de referência e ele aprende o estilo. Os 14 abaixo já vêm prontos no Genie pra você utilizar.</p>
+    </div>
+      <div class="fita">
+        <figure><video src="estilos/4.mp4" poster="estilos/4.jpg" muted loop playsinline preload="none" aria-label="Prévia do estilo Dinâmico"></video><figcaption>Dinâmico</figcaption></figure>
+        <figure><video src="estilos/1.mp4" poster="estilos/1.jpg" muted loop playsinline preload="none" aria-label="Prévia do estilo Colagem"></video><figcaption>Colagem</figcaption></figure>
+        <figure><video src="estilos/14.mp4" poster="estilos/14.jpg" muted loop playsinline preload="none" aria-label="Prévia do estilo Sticker"></video><figcaption>Sticker</figcaption></figure>
+        <figure><video src="estilos/10.mp4" poster="estilos/10.jpg" muted loop playsinline preload="none" aria-label="Prévia do estilo 3D"></video><figcaption>3D</figcaption></figure>
+        <figure><video src="estilos/11.mp4" poster="estilos/11.jpg" muted loop playsinline preload="none" aria-label="Prévia do estilo Aurora glass"></video><figcaption>Aurora glass</figcaption></figure>
+        <figure><video src="estilos/7.mp4" poster="estilos/7.jpg" muted loop playsinline preload="none" aria-label="Prévia do estilo Quadro a quadro"></video><figcaption>Quadro a quadro</figcaption></figure>
+        <figure><video src="estilos/3.mp4" poster="estilos/3.jpg" muted loop playsinline preload="none" aria-label="Prévia do estilo Pixel RPG"></video><figcaption>Pixel RPG</figcaption></figure>
+        <figure><video src="estilos/2.mp4" poster="estilos/2.jpg" muted loop playsinline preload="none" aria-label="Prévia do estilo Cartoon 1930"></video><figcaption>Cartoon 1930</figcaption></figure>
+        <figure><video src="estilos/9.mp4" poster="estilos/9.jpg" muted loop playsinline preload="none" aria-label="Prévia do estilo Sitcom sci-fi"></video><figcaption>Sitcom sci-fi</figcaption></figure>
+        <figure><video src="estilos/13.mp4" poster="estilos/13.jpg" muted loop playsinline preload="none" aria-label="Prévia do estilo Livro pop-up"></video><figcaption>Livro pop-up</figcaption></figure>
+        <figure><video src="estilos/8.mp4" poster="estilos/8.jpg" muted loop playsinline preload="none" aria-label="Prévia do estilo Keynote"></video><figcaption>Keynote</figcaption></figure>
+        <figure><video src="estilos/5.mp4" poster="estilos/5.jpg" muted loop playsinline preload="none" aria-label="Prévia do estilo Screencast vivo"></video><figcaption>Screencast vivo</figcaption></figure>
+        <figure><video src="estilos/12.mp4" poster="estilos/12.jpg" muted loop playsinline preload="none" aria-label="Prévia do estilo Terminal ASCII"></video><figcaption>Terminal ASCII</figcaption></figure>
+        <figure><video src="estilos/6.mp4" poster="estilos/6.jpg" muted loop playsinline preload="none" aria-label="Prévia do estilo Backrooms"></video><figcaption>Backrooms</figcaption></figure>
+      </div>
+  </div>
+</section>
+
+<section class="bloco" id="upload" data-aba>
+  <div class="wrap">
+    <div class="cab rv">
+      <h2>Escolha o molde e clique em Produzir.<br>O Genie faz o vídeo inteiro.</h2>
+      <p>Roteiro, voz, edição e thumbnail, tudo no estilo que <b>VOCÊ</b> decidir!</p>
+    </div>
+    <img class="tela rv" src="img/producao.webp" width="2000" height="1250" loading="lazy" alt="Aba Produção com vídeos sendo produzidos e o menu de escolher o molde aberto">
+  </div>
+</section>
+
+<section class="bloco" id="fila" data-aba>
+  <div class="wrap">
+    <div class="cab rv">
+      <h2>Ao final da produção, tudo feito pra você.<br>Título, Thumbnail, Descrição, Tags Virais.</h2>
+      <p>Seu único trabalho → clicar em <b>Upload</b>.</p>
+    </div>
+    <img class="tela rv" src="img/upload.webp" width="2000" height="1479" loading="lazy" alt="Fila de Upload com vídeos de vários canais, cada um com thumb, título e data programada">
+  </div>
+</section>
+
+<section class="bloco" id="painel" data-aba>
+  <div class="wrap">
+    <div class="cab rv">
+      <h2>Painel completo com todos seus canais.<br>Administre com facilidade.</h2>
+      <p>Views, inscritos, AdSense, vendas e parcerias de cada canal, atualizados todo dia.</p>
+    </div>
+    <img class="tela rv" src="img/painel.webp" width="2000" height="1250" loading="lazy" alt="Painel com receita total no topo e um card por canal">
+  </div>
+</section>
+
+<section class="oferta" id="oferta">
+  <div class="wrap oferta-grid">
+    <div>
+      <h2>Tudo que entra no Genie</h2>
+      <ul class="inclui">
+        <li>Caçada de Ideias <span>encontre ideias virais de qualquer nicho</span></li>
+        <li>Moldes <span>controle total de como quer o vídeo</span></li>
+        <li>Qualquer estilo de edição <span>14 estilos já prontos e crie os seus</span></li>
+        <li>Upload <span>produza vídeos em massa, poste automaticamente</span></li>
+        <li>Painel <span>administre múltiplos canais com facilidade</span></li>
+        <li>Instalação guiada <span>aulas completas de como instalar</span></li>
+        <li>Suporte completo <span>suporte direto a qualquer dúvida via Discord</span></li>
+        <li>Atualizações <span>atualizações frequentes sem taxas adicionais</span></li>
+      </ul>
+    </div>
+    <div class="caixa">
+      <p class="de">Genie completo · acesso vitalício</p>
+      <p class="valor"><small class="x12">12x</small>R$97</p>
+      <p class="parc">ou R$ 937 à vista</p>
+      <a class="btn btn-pri" href="#oferta" data-cta><span>Quero o Genie </span><span class="seta" aria-hidden="true">→</span></a>
+      <p class="garantia"><b>Garantia de 7 dias</b></p>
+    </div>
+  </div>
+</section>
+
+<section class="faq">
+  <div class="wrap faq-grid">
+    <h2 class="rv">Perguntas antes de comprar</h2>
+    <div class="rv">
+      <details><summary>Precisa entender de IA pra usar?</summary><p>Não. Junto com o Genie você ganha acesso a aulas completas, desde a instalação até como utilizar a ferramenta da maneira certa.</p></details>
+      <details><summary>Preciso ter um computador muito potente?</summary><p>Não. O Genie funciona tranquilamente em computadores medianos. Só tenha em mente que, quanto mais lento o computador, mais paciência será preciso para gerar os vídeos.</p></details>
+      <details><summary>Tem algum custo mensal além do Genie?</summary><p>Sim. O Genie é a ferramenta, e as IAs externas são a "gasolina" que ele usa pra rodar com qualidade. Mas não se assuste: nós da equipe do Genie já pensamos no workflow mais custo-benefício do mercado.</p><ul class="custos"><li><b>R$ 170/mês</b> = 300 a 450 vídeos</li><li><b>R$ 330/mês</b> = 800 a 1.500 vídeos</li></ul><p>Lembrando: é você quem decide quais IAs vai usar no workflow, podendo deixar esse custo ainda mais baixo.</p></details>
+      <details><summary>Funciona com quantos canais?</summary><p>Não existe limite. Você pode criar quantos canais quiser. Aliás, temos aulas que guiam você a criar múltiplos canais com segurança.</p></details>
+      <details><summary>Minhas senhas ficam com alguém?</summary><p>Não. O Genie roda no seu PC. Você faz login numa janela separada do navegador e a IA nunca pede senha nem código no chat.</p></details>
+      <details><summary>Eu tenho acesso às atualizações ou tenho que pagar de novo?</summary><p>Aparece um aviso no topo do seu Genie sempre que lançamos uma atualização. É só clicar e pronto, zero custo extra. Comprou uma vez, tem acesso vitalício a todas as atualizações futuras.</p></details>
+      <div class="faq-ig"><p>Ficou com mais alguma dúvida? Nos chame no Instagram.</p><a class="btn btn-sec btn-ig" href="https://www.instagram.com/palhacooculto/" target="_blank" rel="noopener"><svg class="ig" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></svg><span>Chamar no Instagram</span></a></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<div class="barra" id="barra" aria-hidden="true">
+  <div><b><small class="x12">12x</small>R$97</b><span>7 dias de garantia</span></div>
+  <a class="btn btn-pri" href="#oferta" data-cta tabindex="-1"><span>Quero o Genie</span></a>
+</div>
+
+
+<div class="ck" id="ck" role="dialog" aria-modal="true" aria-labelledby="ck-titulo" hidden>
+  <div class="ck-box">
+    <button class="ck-x" type="button" id="ck-x" aria-label="Fechar">×</button>
+    <p class="logo" id="ck-titulo" aria-label="genie">gen<span class="li">ı<svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg></span>e</p>
+    <form id="ck-form" novalidate>
+      <label>Nome<input id="ck-nome" name="name" type="text" autocomplete="name" placeholder="Seu nome completo" required></label>
+      <label>Email<input id="ck-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="voce@email.com" required></label>
+      <label>WhatsApp<input id="ck-zap" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="(11) 91234-5678" required></label>
+      <p class="erro" id="ck-erro" role="alert"></p>
+      <button class="btn btn-pri" type="submit"><span>Prosseguir para a compra</span> <span class="seta" aria-hidden="true">→</span></button>
+    </form>
+    <p class="seguro">Pagamento seguro · Garantia de 7 dias</p>
+  </div>
+</div>
+
+<script>
+// estrela no centro da haste do ı: desenha a letra num canvas e acha o meio da tinta pelos pixels
+(function(){
+  function c(){document.querySelectorAll('.logo .li').forEach(function(s){
+    var cs=getComputedStyle(s),fs=parseFloat(cs.fontSize),W=Math.ceil(fs*2),H=Math.ceil(fs*2);
+    var cv=document.createElement('canvas');cv.width=W;cv.height=H;var x=cv.getContext('2d');
+    x.font=cs.fontWeight+' '+cs.fontSize+' '+cs.fontFamily;x.textBaseline='alphabetic';x.fillStyle='#000';
+    var o=Math.round(fs*0.5);x.fillText('\u0131',o,Math.round(fs*1.4));
+    var d=x.getImageData(0,0,W,H).data,mn=W,mx=-1;
+    for(var col=0;col<W;col++){for(var row=0;row<H;row++){if(d[(row*W+col)*4+3]>128){if(col<mn)mn=col;if(col>mx)mx=col;break;}}}
+    if(mx<0)return;
+    s.style.setProperty('--sx',(((mn+mx+1)/2)-o)+'px');});}
+  (document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(c);window.addEventListener('load',c);window.addEventListener('resize',c);
+})();
+
+// ---- checkout preenchido: o botão de comprar abre o pop-up, e o "Prosseguir" leva pra Kiwify com nome, email e WhatsApp ----
+const CHECKOUT = 'https://pay.kiwify.com.br/v0OeHQh';
+// planilha privada "Leads Genie" (Google Apps Script, conta palhacooculto)
+const LEADS = 'https://script.google.com/macros/s/AKfycbxhfEGRzCf6aUhaePPYpmrO7GCqd8hTtmWkjv1gGkudp0xEVq04Z8lDvr8SWVRKPsss/exec';
+(function(){
+  const ck = document.getElementById('ck'), f = document.getElementById('ck-form'), erro = document.getElementById('ck-erro');
+  const nome = document.getElementById('ck-nome'), email = document.getElementById('ck-email'), zap = document.getElementById('ck-zap');
+  let volta = null;
+  try { const d = JSON.parse(localStorage.getItem('genie-ck') || '{}'); nome.value = d.n || ''; email.value = d.e || ''; zap.value = d.z || ''; } catch(e){}
+  function abrir(e){ e.preventDefault(); volta = document.activeElement; ck.hidden = false; ck.classList.add('on'); document.body.classList.add('ck-aberto');
+    setTimeout(() => (nome.value ? (email.value ? (zap.value ? f.querySelector('button') : zap) : email) : nome).focus(), 60); }
+  function fechar(){ ck.classList.remove('on'); ck.hidden = true; document.body.classList.remove('ck-aberto'); erro.textContent = ''; if (volta) volta.focus(); }
+  document.querySelectorAll('[data-cta]').forEach(a => a.addEventListener('click', abrir));
+  document.getElementById('ck-x').addEventListener('click', fechar);
+  ck.addEventListener('click', e => { if (e.target === ck) fechar(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !ck.hidden) fechar(); });
+  // máscara (11) 91234-5678
+  zap.addEventListener('input', () => {
+    let d = zap.value.replace(/\D/g, ''); if (d.startsWith('55') && d.length > 11) d = d.slice(2); d = d.slice(0, 11);
+    zap.value = d.length > 6 ? `(${d.slice(0,2)}) ${d.slice(2, d.length - 4)}-${d.slice(-4)}` : d.length > 2 ? `(${d.slice(0,2)}) ${d.slice(2)}` : d;
+  });
+  [nome, email, zap].forEach(i => i.addEventListener('input', () => { i.removeAttribute('aria-invalid'); erro.textContent = ''; }));
+  f.addEventListener('submit', e => {
+    e.preventDefault();
+    const n = nome.value.trim().replace(/\s+/g, ' '), em = email.value.trim(), dz = zap.value.replace(/\D/g, '');
+    const ruim = (i, msg) => { i.setAttribute('aria-invalid', 'true'); i.focus(); erro.textContent = msg; };
+    if (n.split(' ').length < 2) return ruim(nome, 'Digite seu nome e sobrenome.');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em)) return ruim(email, 'Digite um email válido.');
+    if (dz.length < 10 || dz.length > 11) return ruim(zap, 'Digite o WhatsApp com DDD.');
+    try { localStorage.setItem('genie-ck', JSON.stringify({n, e: em, z: zap.value})); } catch(_){}
+    if (!CHECKOUT) { erro.textContent = 'Link do checkout ainda não configurado.'; return; }
+    // salva o lead na planilha (sendBeacon sobrevive à troca de página)
+    const q = new URLSearchParams(location.search);
+    const lead = JSON.stringify({nome: n, email: em, whatsapp: zap.value, utm_source: q.get('utm_source') || '', utm_medium: q.get('utm_medium') || '',
+      utm_campaign: q.get('utm_campaign') || '', utm_content: q.get('utm_content') || '', pagina: location.href.split('?')[0]});
+    try {
+      const blob = new Blob([lead], {type: 'text/plain;charset=UTF-8'});
+      if (!(navigator.sendBeacon && navigator.sendBeacon(LEADS, blob)))
+        fetch(LEADS, {method: 'POST', mode: 'no-cors', keepalive: true, headers: {'Content-Type': 'text/plain;charset=UTF-8'}, body: lead});
+    } catch(_){}
+    const u = new URL(CHECKOUT);
+    u.searchParams.set('name', n); u.searchParams.set('email', em); u.searchParams.set('phone', dz);
+    new URLSearchParams(location.search).forEach((v, k) => { if (!u.searchParams.has(k)) u.searchParams.set(k, v); });   // repassa UTMs
+    location.href = u.toString();
+  });
+})();
+
+// aba do topo acompanha a seção (igual ao sublinhado do Genie)
+(function(){
+  var links={}; document.querySelectorAll('.abas a').forEach(function(a){links[a.getAttribute('href').slice(1)]=a;});
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(e.isIntersecting){Object.values(links).forEach(function(a){a.classList.remove('on')}); if(links[e.target.id]) links[e.target.id].classList.add('on');}
+  });},{rootMargin:'-45% 0px -50% 0px'});
+  document.querySelectorAll('[data-aba]').forEach(function(s){io.observe(s)});
+})();
+
+// entrada ao rolar (com garantia de aparecer)
+(function(){
+  var els=document.querySelectorAll('.rv');
+  if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('vis')});return;}
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('vis');io.unobserve(e.target);}});},{rootMargin:'0px 0px -8% 0px'});
+  els.forEach(function(e){io.observe(e)});
+  setTimeout(function(){els.forEach(function(e){e.classList.add('vis')})},3500);
+})();
+
+// prévias dos estilos tocam só quando aparecem
+(function(){
+  var calmo=matchMedia('(prefers-reduced-motion: reduce)').matches; if(calmo) return;
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    var v=e.target; if(e.isIntersecting){v.preload='auto';var p=v.play();if(p&&p.catch)p.catch(function(){});} else v.pause();
+  });},{threshold:.25});
+  document.querySelectorAll('.fita video').forEach(function(v){io.observe(v)});
+})();
+
+// barra de compra no celular: some no topo e na oferta
+(function(){
+  var b=document.getElementById('barra'),of=document.getElementById('oferta');
+  function f(){var r=of.getBoundingClientRect();var naOferta=r.top<innerHeight&&r.bottom>0;b.classList.toggle('on',scrollY>innerHeight*.8&&!naOferta);}
+  addEventListener('scroll',f,{passive:true});f();
+})();
+</script>
+</body>
+</html>
