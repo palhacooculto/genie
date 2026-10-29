@@ -314,6 +314,16 @@ body.ck-aberto{overflow:hidden}
 .hero .preco-mini b{font-size:1.45rem}
 @media (prefers-reduced-motion:reduce){.hero .acoes .btn-pri,.hero .acoes .btn-pri::after{animation:none}}
 
+/* botões de compra discretos entre as seções */
+.mini-cta{display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;margin-top:44px}
+.btn-mini{background:transparent;color:#F5F5F5;border:1px solid rgba(57,255,106,.55);padding:12px 24px;font-size:.98rem;gap:10px;
+  box-shadow:0 0 18px rgba(57,255,106,.12);transition:background .2s,border-color .2s,box-shadow .2s}
+.btn-mini:hover{background:rgba(57,255,106,.1);border-color:#39FF6A;box-shadow:0 0 26px rgba(57,255,106,.3)}
+.btn-mini .seta{color:#39FF6A}
+.btn-mini:hover .seta{transform:translateX(3px)}
+.mini-preco{font-size:.92rem;color:var(--mut)}.mini-preco b{color:var(--ink);font-weight:600}
+@media (max-width:760px){.mini-cta{margin-top:28px;gap:10px;flex-direction:column}}
+
 /* respiro entre a print do Painel e a oferta (fundo claro) */
 #painel{padding-bottom:calc(var(--s10) - 40px) !important}
 
@@ -431,6 +441,7 @@ img.tela{border:3px solid #F5F5F5 !important;border-radius:18px !important;box-s
       <p>Você escreve o nicho e clica em Caçar. O Genie caça por todo YouTube e devolve vídeos que bombaram muito acima da média.</p>
     </div>
     <img class="tela rv" src="img/ideas-zoom.webp" width="1600" height="867" loading="lazy" alt="Caçada com vídeos gringos de vários nichos e o multiplicador de outlier de cada um">
+    <div class="mini-cta rv"><a class="btn btn-mini" href="#oferta" data-cta><span>Quero o Genie</span> <span class="seta" aria-hidden="true">→</span></a><span class="mini-preco"><b><small class="x12">12x</small>R$97</b> · acesso vitalício</span></div>
   </div>
 </section>
 
@@ -441,6 +452,7 @@ img.tela{border:3px solid #F5F5F5 !important;border-radius:18px !important;box-s
       <p>Nicho, tom, edição, thumbnail e produto de cada canal ficam guardados. Todo vídeo segue o molde do jeito que você mandar.</p>
     </div>
     <img class="tela rv" src="img/moldes-canais.webp" width="2000" height="492" loading="lazy" alt="Aba Moldes: seis canais, cada um com a sua ficha">
+    <div class="mini-cta rv"><a class="btn btn-mini" href="#oferta" data-cta><span>Quero o Genie</span> <span class="seta" aria-hidden="true">→</span></a><span class="mini-preco"><b><small class="x12">12x</small>R$97</b> · acesso vitalício</span></div>
   </div>
 </section>
 
@@ -466,6 +478,7 @@ img.tela{border:3px solid #F5F5F5 !important;border-radius:18px !important;box-s
         <figure><video src="estilos/12.mp4" poster="estilos/12.jpg" muted loop playsinline preload="none" aria-label="Prévia do estilo Terminal ASCII"></video><figcaption>Terminal ASCII</figcaption></figure>
         <figure><video src="estilos/6.mp4" poster="estilos/6.jpg" muted loop playsinline preload="none" aria-label="Prévia do estilo Backrooms"></video><figcaption>Backrooms</figcaption></figure>
       </div>
+    <div class="mini-cta rv"><a class="btn btn-mini" href="#oferta" data-cta><span>Quero o Genie</span> <span class="seta" aria-hidden="true">→</span></a><span class="mini-preco"><b><small class="x12">12x</small>R$97</b> · acesso vitalício</span></div>
   </div>
 </section>
 
@@ -476,6 +489,7 @@ img.tela{border:3px solid #F5F5F5 !important;border-radius:18px !important;box-s
       <p>Roteiro, voz, edição e thumbnail, tudo no estilo que <b>VOCÊ</b> decidir!</p>
     </div>
     <img class="tela rv" src="img/producao.webp" width="2000" height="1250" loading="lazy" alt="Aba Produção com vídeos sendo produzidos e o menu de escolher o molde aberto">
+    <div class="mini-cta rv"><a class="btn btn-mini" href="#oferta" data-cta><span>Quero o Genie</span> <span class="seta" aria-hidden="true">→</span></a><span class="mini-preco"><b><small class="x12">12x</small>R$97</b> · acesso vitalício</span></div>
   </div>
 </section>
 
@@ -486,6 +500,7 @@ img.tela{border:3px solid #F5F5F5 !important;border-radius:18px !important;box-s
       <p>Seu único trabalho → clicar em <b>Upload</b>.</p>
     </div>
     <img class="tela rv" src="img/upload.webp" width="2000" height="1479" loading="lazy" alt="Fila de Upload com vídeos de vários canais, cada um com thumb, título e data programada">
+    <div class="mini-cta rv"><a class="btn btn-mini" href="#oferta" data-cta><span>Quero o Genie</span> <span class="seta" aria-hidden="true">→</span></a><span class="mini-preco"><b><small class="x12">12x</small>R$97</b> · acesso vitalício</span></div>
   </div>
 </section>
 
@@ -496,6 +511,7 @@ img.tela{border:3px solid #F5F5F5 !important;border-radius:18px !important;box-s
       <p>Views, inscritos, AdSense, vendas e parcerias de cada canal, atualizados todo dia.</p>
     </div>
     <img class="tela rv" src="img/painel.webp" width="2000" height="1250" loading="lazy" alt="Painel com receita total no topo e um card por canal">
+    <div class="mini-cta rv"><a class="btn btn-mini" href="#oferta" data-cta><span>Quero o Genie</span> <span class="seta" aria-hidden="true">→</span></a><span class="mini-preco"><b><small class="x12">12x</small>R$97</b> · acesso vitalício</span></div>
   </div>
 </section>
 
