@@ -3,6 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<script>
+// idioma: PT (genieytb.com) x EN (genieyoutube.com). Sem escolha salva, segue o idioma do navegador/PC:
+// português -> PT, qualquer outro -> EN. Escolha manual (botão) fica salva e vence o automático.
+(function(){
+  var DOM={pt:'genieytb.com',en:'genieyoutube.com'},AQUI='pt';
+  var h=location.hostname.replace(/^www\./,'');if(h!==DOM.pt&&h!==DOM.en)return;
+  var q=new URLSearchParams(location.search),k='genie-lang',quer=null;
+  try{var l=q.get('lang');if(l==='pt'||l==='en'){localStorage.setItem(k,l);q.delete('lang');
+    history.replaceState(null,'',location.pathname+(q.toString()?'?'+q:'')+location.hash);}quer=localStorage.getItem(k);}catch(e){}
+  if(!quer){var ls=(navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||'']);
+    quer=/^pt\b/i.test(ls[0]||'')?'pt':'en';}
+  if(quer!==AQUI)location.replace('https://'+DOM[quer]+location.pathname+location.search+location.hash);
+})();
+</script>
 <title>Genie</title>
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" href="favicon.png">
@@ -332,6 +346,14 @@ html{scroll-behavior:smooth}
 .top .btn{white-space:nowrap}
 @media (max-width:520px){.btn-faq .faq-l{display:none}.btn-faq .faq-c{display:inline}.top .top-acoes{gap:6px}.top .btn{padding:10px 12px;font-size:.8rem}.top .btn-ig{padding:10px}}
 
+/* botão de idioma (minimalista) */
+.btn-lang{padding:11px 14px;font-family:var(--f-mono);font-size:.8rem;font-weight:500;letter-spacing:.04em;color:var(--soft)}
+.btn-lang:hover{color:var(--ink)}
+@media (max-width:1100px){.btn-faq .faq-l{display:none}.btn-faq .faq-c{display:inline}}
+@media (max-width:900px){.abas{display:none}}
+@media (max-width:520px){.top .btn-lang{padding:10px 9px;font-size:.72rem}.top .wrap{gap:10px;padding:0 14px}.top .top-acoes{gap:5px}.top .logo{font-size:24px}}
+@media (max-width:374px){.top .btn{padding:9px 8px;font-size:.74rem}.top .btn-ig{padding:9px}.top .logo{font-size:21px}}
+
 /* respiro entre a print do Painel e a oferta (fundo claro) */
 #painel{padding-bottom:calc(var(--s10) - 40px) !important}
 
@@ -375,6 +397,7 @@ img.tela{border:3px solid #F5F5F5 !important;border-radius:18px !important;box-s
       <a href="#painel">Painel</a>
     </nav>
     <div class="top-acoes">
+      <a class="btn btn-sec btn-lang" href="https://genieyoutube.com/?lang=en" hreflang="en" aria-label="Switch to English (EN-US)" title="Switch to English (EN-US)" data-lang="en">PT-BR</a>
       <a class="btn btn-sec btn-faq" href="#faq"><span class="faq-l">Perguntas Frequentes</span><span class="faq-c">FAQ</span></a>
       <a class="btn btn-sec btn-ig" href="https://www.instagram.com/palhacooculto/" target="_blank" rel="noopener"><svg class="ig" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></svg><span>Suporte Instagram</span></a>
       <a class="btn btn-pri" href="#oferta" data-cta><span>Quero o Genie</span></a>
@@ -658,6 +681,12 @@ const LEADS = 'https://script.google.com/macros/s/AKfycbxhfEGRzCf6aUhaePPYpmrO7G
     addEventListener('pageshow', ev => { if (ev.persisted) { btn.disabled = false; btn.innerHTML = txt; foi = false; } });
   });
 })();
+
+// botão de idioma: salva a escolha aqui também (não volta pro automático) e leva os parâmetros (UTMs) junto
+(function(){var b=document.querySelector('.btn-lang');if(!b)return;b.addEventListener('click',function(e){
+  var l=b.getAttribute('data-lang');try{localStorage.setItem('genie-lang',l)}catch(_){}
+  var u=new URL(b.href);new URLSearchParams(location.search).forEach(function(v,k){if(k!=='lang')u.searchParams.set(k,v)});
+  e.preventDefault();location.href=u.toString();});})();
 
 // aba do topo acompanha a seção (igual ao sublinhado do Genie)
 (function(){
