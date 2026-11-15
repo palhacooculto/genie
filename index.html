@@ -610,6 +610,32 @@ img.tela{border:3px solid #F5F5F5 !important;border-radius:18px !important;box-s
 const CHECKOUT = 'https://pay.kiwify.com.br/v0OeHQh';
 // planilha privada "Leads Genie" (Google Apps Script, conta palhacooculto)
 const LEADS = 'https://script.google.com/macros/s/AKfycbxhfEGRzCf6aUhaePPYpmrO7GCqd8hTtmWkjv1gGkudp0xEVq04Z8lDvr8SWVRKPsss/exec';
+// origem do visitante: UTM do link; sem UTM, descobre pelo site/app de onde veio (YouTube, Google, Instagram...)
+// guarda 30 dias, pra quem volta digitando o endereço continuar com a origem certa
+const ORIGEM = (function(){
+  const q = new URLSearchParams(location.search), agora = Date.now();
+  let o = null;
+  if (q.get('utm_source')) o = {s: q.get('utm_source'), m: q.get('utm_medium') || '', c: q.get('utm_campaign') || '', t: q.get('utm_content') || ''};
+  else {
+    const ref = document.referrer || '', ua = navigator.userAgent || '';
+    let h = ''; try { h = new URL(ref).hostname.replace(/^www\.|^m\.|^l\.|^lm\./, ''); } catch(e){}
+    if (ref.startsWith('android-app://')) h = ref.slice(14).split('/')[0];
+    const mapa = [[/youtube|youtu\.be/, 'youtube'], [/instagram/, 'ig'], [/facebook|fb\.com|katana/, 'facebook'], [/tiktok|musically|bytedance/, 'tiktok'],
+      [/^google\.|googlequicksearch|android\.gm/, 'google'], [/bing\./, 'bing'], [/chatgpt|openai/, 'chatgpt'], [/whatsapp|wa\.me/, 'whatsapp'],
+      [/discord/, 'discord'], [/^t\.co$|twitter|^x\.com/, 'x'], [/kiwify/, 'kiwify']];
+    const achou = h && h !== location.hostname && mapa.find(p => p[0].test(h));
+    if (achou) o = {s: achou[1], m: /^google|^bing/.test(achou[1]) ? 'busca' : 'link', c: '', t: ''};
+    else if (h && h !== location.hostname) o = {s: h, m: 'link', c: '', t: ''};
+    else if (/Instagram/.test(ua)) o = {s: 'ig', m: 'app', c: '', t: ''};
+    else if (/FBAN|FBAV/.test(ua)) o = {s: 'facebook', m: 'app', c: '', t: ''};
+    else if (/musical_ly|BytedanceWebview|TikTok/i.test(ua)) o = {s: 'tiktok', m: 'app', c: '', t: ''};
+  }
+  try {
+    if (o) localStorage.setItem('genie-origem', JSON.stringify(Object.assign({d: agora}, o)));
+    else { const v = JSON.parse(localStorage.getItem('genie-origem') || 'null'); if (v && agora - v.d < 30 * 864e5) o = v; }
+  } catch(e){}
+  return o || {s: 'direto', m: '', c: '', t: ''};
+})();
 (function(){
   const ck = document.getElementById('ck'), f = document.getElementById('ck-form'), erro = document.getElementById('ck-erro');
   const nome = document.getElementById('ck-nome'), email = document.getElementById('ck-email'), zap = document.getElementById('ck-zap');
@@ -640,11 +666,13 @@ const LEADS = 'https://script.google.com/macros/s/AKfycbxhfEGRzCf6aUhaePPYpmrO7G
     // salva o lead na planilha ANTES de sair da página (3 caminhos; o servidor ignora repetidos pelo id)
     const q = new URLSearchParams(location.search);
     const dados = {id: Date.now().toString(36) + Math.random().toString(36).slice(2, 8), nome: n, email: em, whatsapp: zap.value,
-      utm_source: q.get('utm_source') || '', utm_medium: q.get('utm_medium') || '', utm_campaign: q.get('utm_campaign') || '',
-      utm_content: q.get('utm_content') || '', pagina: location.href.split('?')[0]};
+      utm_source: ORIGEM.s, utm_medium: ORIGEM.m, utm_campaign: ORIGEM.c,
+      utm_content: ORIGEM.t, pagina: location.href.split('?')[0]};
     const u = new URL(CHECKOUT);
     u.searchParams.set('name', n); u.searchParams.set('email', em); u.searchParams.set('phone', dz);
     q.forEach((v, k) => { if (!u.searchParams.has(k)) u.searchParams.set(k, v); });   // repassa UTMs
+    if (!u.searchParams.has('utm_source') && ORIGEM.s !== 'direto') {   // Kiwify também vê a origem descoberta
+      u.searchParams.set('utm_source', ORIGEM.s); if (ORIGEM.m) u.searchParams.set('utm_medium', ORIGEM.m); }
     const btn = f.querySelector('button[type=submit]'), txt = btn.innerHTML;
     btn.disabled = true; btn.querySelector('span').textContent = 'Indo para o pagamento…';
     let foi = false; const ir = () => { if (foi) return; foi = true; location.href = u.toString(); };
