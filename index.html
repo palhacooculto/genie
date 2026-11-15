@@ -666,7 +666,7 @@ const ORIGEM = (function(){
     // salva o lead na planilha ANTES de sair da página (3 caminhos; o servidor ignora repetidos pelo id)
     const q = new URLSearchParams(location.search);
     const dados = {id: Date.now().toString(36) + Math.random().toString(36).slice(2, 8), nome: n, email: em, whatsapp: zap.value,
-      utm_source: ORIGEM.s, utm_medium: ORIGEM.m, utm_campaign: ORIGEM.c,
+      utm_source: ORIGEM.s, utm_medium: ORIGEM.m,
       utm_content: ORIGEM.t, pagina: location.href.split('?')[0]};
     const u = new URL(CHECKOUT);
     u.searchParams.set('name', n); u.searchParams.set('email', em); u.searchParams.set('phone', dz);
