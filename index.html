@@ -21,7 +21,7 @@
 <meta name="theme-color" content="#0A0A0A">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Poppins:wght@600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800;900&family=Geist+Mono:wght@400;500&family=Poppins:wght@600&display=swap">
 <style>
 :root{
   color-scheme:dark;
@@ -362,11 +362,143 @@ img.tela{border:3px solid #F5F5F5 !important;border-radius:18px !important;box-s
   .barra{display:flex}
   footer{padding-bottom:96px}
 }
+
+/* ================= BLACK FRIDAY ================= */
+:root{--neon:#39FF6A;--neon-ink:#03200C;--corte:#FF3B47}
+body:not(.bf) .so-bf{display:none!important}
+body.bf .so-normal{display:none!important}
+body.bf{scroll-padding-top:112px}
+html:has(body.bf){scroll-padding-top:112px}
+body.bf #faq{scroll-margin-top:120px}
+@property --bfa{syntax:'<angle>';inherits:false;initial-value:0deg}
+
+/* faixa correndo no topo */
+.bf-faixa{position:relative;overflow:hidden;height:40px;background:var(--neon);color:var(--neon-ink);display:flex;align-items:center;
+  font:900 14px/1 var(--f-txt);letter-spacing:.06em;text-transform:uppercase;text-decoration:none;box-shadow:0 0 30px rgba(57,255,106,.45)}
+.bf-trilho{display:flex;flex:none;white-space:nowrap;animation:bf-trilho 26s linear infinite}
+.bf-faixa:hover .bf-trilho{animation-play-state:paused}
+.bf-grupo{display:flex;align-items:center;gap:22px;padding-right:22px}
+.bf-grupo svg{width:13px;height:13px;flex:none;animation:bf-gira 2.4s linear infinite}
+.bf-grupo .cd{font-family:var(--f-mono);font-weight:500;background:var(--neon-ink);color:var(--neon);padding:5px 9px;border-radius:6px;letter-spacing:.02em;font-variant-numeric:tabular-nums}
+.bf-faixa::after{content:'';position:absolute;top:0;bottom:0;left:-30%;width:22%;transform:skewX(-20deg);pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.75),transparent);animation:bf-brilho 3.6s ease-in-out infinite}
+@keyframes bf-trilho{to{transform:translateX(-50%)}}
+@keyframes bf-gira{to{transform:rotate(360deg)}}
+@keyframes bf-brilho{0%,55%{left:-30%}100%{left:130%}}
+
+/* cartão do hero (logo no começo, acima da logo) */
+body.bf .hero{padding-top:var(--s6)}
+.bf-card{position:relative;margin:0 auto var(--s7);padding:2px;border-radius:24px;max-width:980px;width:100%;text-align:left;
+  background:conic-gradient(from var(--bfa),rgba(57,255,106,.15),var(--neon),#fff,var(--neon),rgba(57,255,106,.15) 40%,rgba(57,255,106,.15));
+  animation:bf-borda 4s linear infinite,bf-aura 2.4s ease-in-out infinite}
+.bf-card-in{border-radius:22px;padding:18px 26px;background:radial-gradient(120% 160% at 30% 0%,#0f2a17 0%,#0b130d 45%,#0A0A0A 100%);
+  display:flex;align-items:center;justify-content:space-between;gap:24px}
+.bf-esq{display:grid;gap:10px;justify-items:start}
+@keyframes bf-borda{to{--bfa:360deg}}
+@keyframes bf-aura{0%,100%{box-shadow:0 0 26px rgba(57,255,106,.25),0 0 80px rgba(57,255,106,.08)}50%{box-shadow:0 0 44px rgba(57,255,106,.5),0 0 120px rgba(57,255,106,.18)}}
+.bf-tag{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:10px;padding:8px 16px 8px 14px;border-radius:999px;background:#fff;color:#000;
+  font:900 14px/1 var(--f-txt);letter-spacing:.22em;text-transform:uppercase}
+.bf-tag .pt{width:9px;height:9px;border-radius:50%;background:var(--corte);box-shadow:0 0 0 0 rgba(255,59,71,.7);animation:bf-pt 1.2s ease-out infinite}
+@keyframes bf-pt{0%{box-shadow:0 0 0 0 rgba(255,59,71,.7)}100%{box-shadow:0 0 0 10px rgba(255,59,71,0)}}
+.bf-tag::after{content:'';position:absolute;top:0;bottom:0;left:-40%;width:30%;transform:skewX(-20deg);background:linear-gradient(90deg,transparent,rgba(57,255,106,.7),transparent);animation:bf-brilho 2.8s ease-in-out infinite}
+.bf-oferta{display:flex;align-items:center;gap:18px;line-height:1}
+.bf-pct{font:900 clamp(3rem,5vw,4.4rem)/.9 var(--f-txt);letter-spacing:-.04em;color:var(--neon);
+  text-shadow:0 0 18px rgba(57,255,106,.75),0 0 46px rgba(57,255,106,.35);animation:bf-neon 5s linear infinite}
+@keyframes bf-neon{0%,18%,22%,60%,63%,100%{opacity:1}20%,61.5%{opacity:.35}}
+.bf-sep{width:2px;align-self:stretch;background:linear-gradient(transparent,rgba(57,255,106,.7),transparent)}
+.bf-reais{display:grid;text-align:left;gap:5px}
+.bf-reais b{font:900 clamp(1.8rem,3vw,2.5rem)/1 var(--f-txt);letter-spacing:-.03em;color:#fff;font-variant-numeric:tabular-nums}
+.bf-reais>span{font:800 .85rem/1 var(--f-txt);letter-spacing:.16em;text-transform:uppercase;color:var(--neon)}
+.bf-dir{display:grid;gap:10px;justify-items:center}
+.bf-leg{font-size:var(--t-xs);color:var(--soft);letter-spacing:.04em}
+.bf-leg b{color:#fff}
+@media (max-width:900px){
+  .bf-card-in{flex-direction:column;gap:16px;padding:18px 14px 16px}
+  .bf-esq{justify-items:center}
+  .bf-leg{text-align:center}
+}
+
+/* contador em blocos */
+.bf-cd{display:flex;align-items:flex-start;justify-content:center;gap:8px}
+.bf-cd .u{display:grid;justify-items:center;gap:6px}
+.bf-cd .u b{display:flex;justify-content:center;min-width:74px;padding:12px 8px 10px;border-radius:14px;background:#050505;border:1px solid rgba(57,255,106,.35);
+  font:500 2.4rem/1 var(--f-mono);color:var(--neon);text-shadow:0 0 14px rgba(57,255,106,.6);overflow:hidden;box-shadow:inset 0 -18px 24px -18px rgba(57,255,106,.25)}
+.bf-cd .d{display:inline-block;width:.62em;text-align:center}
+.bf-cd .d.vira{animation:bf-vira .45s cubic-bezier(.2,1.4,.4,1)}
+@keyframes bf-vira{from{transform:translateY(-80%) scale(.7);opacity:0;filter:blur(4px)}to{transform:none;opacity:1;filter:none}}
+.bf-cd .u small{font:700 .68rem/1 var(--f-txt);letter-spacing:.18em;text-transform:uppercase;color:var(--mut)}
+.bf-cd .sep{font:500 2rem/1 var(--f-mono);color:var(--neon);padding-top:14px;font-style:normal;animation:bf-pisca 1s steps(1) infinite}
+@keyframes bf-pisca{50%{opacity:.25}}
+.bf-cd .u-s b{border-color:var(--neon)}
+.bf-cd .u-s.bate b{animation:bf-bate .5s ease-out}
+@keyframes bf-bate{0%{box-shadow:0 0 0 0 rgba(57,255,106,.8),inset 0 -18px 24px -18px rgba(57,255,106,.25);transform:scale(1.07)}100%{box-shadow:0 0 0 14px rgba(57,255,106,0),inset 0 -18px 24px -18px rgba(57,255,106,.25);transform:none}}
+
+/* preço riscado */
+.bf-risco{position:relative;display:inline-block;color:var(--mut);font-weight:500;text-decoration:none}
+.bf-risco::after{content:'';position:absolute;left:-4%;right:-4%;top:52%;height:2px;background:var(--corte);border-radius:2px;transform:rotate(-8deg) scaleX(0);transform-origin:left;
+  box-shadow:0 0 8px rgba(255,59,71,.7);animation:bf-risca .6s cubic-bezier(.6,0,.3,1) .9s forwards}
+@keyframes bf-risca{to{transform:rotate(-8deg) scaleX(1)}}
+.hero .preco-mini.so-bf{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;justify-content:center}
+.hero .preco-mini .bf-novo{color:var(--neon);text-shadow:0 0 12px rgba(57,255,106,.5)}
+.mini-preco .bf-novo{color:var(--neon)}
+.bf-chip{display:inline-block;font:800 .72rem/1 var(--f-txt);letter-spacing:.12em;text-transform:uppercase;background:var(--neon);color:var(--neon-ink);padding:5px 8px;border-radius:6px;vertical-align:.12em}
+
+/* caixa de pagamento */
+body.bf .oferta{overflow-x:clip}
+body.bf .caixa{position:relative;border:2px solid var(--neon);animation:bf-caixa 2.4s ease-in-out infinite}
+@keyframes bf-caixa{0%,100%{box-shadow:0 0 0 0 rgba(57,255,106,0),0 20px 60px -20px rgba(57,255,106,.45)}50%{box-shadow:0 0 0 6px rgba(57,255,106,.18),0 20px 80px -10px rgba(57,255,106,.7)}}
+.bf-selo{position:absolute;top:-26px;right:-18px;z-index:3;display:grid;justify-items:center;padding:12px 16px 10px;border-radius:16px;background:var(--neon);color:var(--neon-ink);
+  font:900 .72rem/1 var(--f-txt);letter-spacing:.16em;text-transform:uppercase;box-shadow:0 10px 30px -6px rgba(0,0,0,.45),0 0 30px rgba(57,255,106,.6);
+  transform:rotate(9deg);animation:bf-selo 2.2s ease-in-out infinite}
+.bf-selo b{font-size:2.3rem;letter-spacing:-.04em;line-height:.95;margin-top:3px}
+@keyframes bf-selo{0%,100%{transform:rotate(9deg) scale(1)}50%{transform:rotate(4deg) scale(1.08)}}
+.caixa .bf-antes{margin-top:var(--s3);font-size:var(--t-lg);color:var(--soft)}
+.caixa .valor .bf-novo{color:var(--neon);text-shadow:0 0 22px rgba(57,255,106,.45)}
+.caixa .parc s{margin-left:6px}
+.bf-eco{margin-top:var(--s4);display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;background:rgba(57,255,106,.12);border:1px solid rgba(57,255,106,.5);
+  color:#fff;font-weight:600;font-size:var(--t-md)}
+.bf-eco b{color:var(--neon);font-weight:800}
+.bf-cd-box{margin-top:var(--s5);padding:var(--s4);border-radius:16px;background:#050505;border:1px solid var(--line);display:grid;gap:12px;justify-items:center}
+.bf-cd-box>p{font:700 .78rem/1 var(--f-txt);letter-spacing:.2em;text-transform:uppercase;color:var(--soft)}
+.bf-cd-box>p i{font-style:normal;color:var(--corte)}
+.caixa .bf-cd .u b{min-width:62px;font-size:2rem;padding:10px 6px 8px}
+.caixa .bf-cd .sep{font-size:1.6rem;padding-top:11px}
+body.bf .caixa .btn-pri{background:var(--neon);color:var(--neon-ink);font-size:1.15rem;animation:btn-verde 3.2s ease-in-out infinite}
+body.bf .caixa .btn-pri:hover{background:#5CFF85}
+body.bf .caixa .btn-pri::after{animation:feixe 3.2s ease-in-out infinite;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25) 30%,rgba(255,255,255,.95) 50%,rgba(255,255,255,.25) 70%,transparent)}
+.bf-confete{position:absolute;width:8px;height:12px;border-radius:2px;pointer-events:none;z-index:4}
+
+/* pop-up do checkout e barra do celular */
+.ck-bf{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin:-8px 0 var(--s5);padding:10px 12px;border-radius:12px;
+  background:rgba(57,255,106,.1);border:1px solid rgba(57,255,106,.55);font-size:var(--t-sm);color:#fff;text-align:center;animation:bf-aura 2.4s ease-in-out infinite}
+.ck-bf b{color:var(--neon)}
+.ck-bf .cd{font-family:var(--f-mono);color:var(--neon)}
+body.bf .ck .logo{margin-bottom:var(--s5)}
+body.bf .ck .btn-pri,body.bf .barra .btn-pri{background:var(--neon);color:var(--neon-ink)}
+body.bf .barra{border-top:2px solid var(--neon);box-shadow:0 -10px 30px -10px rgba(57,255,106,.5)}
+.barra .bf-novo{color:var(--neon)}
+.barra b span{display:inline-block}
+.barra .bf-risco{font-size:.8rem;margin-right:4px}
+.barra span.so-bf b{font-family:var(--f-mono);color:var(--neon);font-size:inherit;font-weight:500}
+
+@media (max-width:720px){
+  .bf-faixa{height:34px;font-size:12px}
+  .bf-oferta{gap:14px}
+  .bf-tag{font-size:12px;letter-spacing:.18em}
+  .bf-cd{gap:4px}
+  .bf-cd .u b{min-width:58px;font-size:1.8rem;padding:10px 4px 8px;border-radius:12px}
+  .bf-cd .sep{font-size:1.4rem;padding-top:11px}
+  .caixa .bf-cd .u b{min-width:56px;font-size:1.7rem}
+  .bf-selo{right:-6px;top:-30px}
+}
+@media (prefers-reduced-motion:reduce){.bf-trilho,.bf-card,.bf-pct,.bf-selo,body.bf .caixa,.ck-bf,.bf-faixa::after,.bf-tag::after{animation:none}}
 </style>
 </head>
 <body>
+<script>var BF_FIM=new Date('2026-11-27T23:59:59-03:00').getTime();if(Date.now()<BF_FIM)document.body.classList.add('bf');</script>
 
 <header class="top">
+  <a class="bf-faixa so-bf" href="#oferta" aria-label="Black Friday: 20% de desconto, R$187 a menos"><div class="bf-trilho"><div class="bf-grupo" aria-hidden="true"><span>Black Friday</span><svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg><span>20% OFF</span><svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg><span>-R$187 de desconto</span><svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg><span>Acaba em <span class="cd" data-cd="curto">--</span></span><svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg></div><div class="bf-grupo" aria-hidden="true"><span>Black Friday</span><svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg><span>20% OFF</span><svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg><span>-R$187 de desconto</span><svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg><span>Acaba em <span class="cd" data-cd="curto">--</span></span><svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg></div><div class="bf-grupo" aria-hidden="true"><span>Black Friday</span><svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg><span>20% OFF</span><svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg><span>-R$187 de desconto</span><svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg><span>Acaba em <span class="cd" data-cd="curto">--</span></span><svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg></div><div class="bf-grupo" aria-hidden="true"><span>Black Friday</span><svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg><span>20% OFF</span><svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg><span>-R$187 de desconto</span><svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg><span>Acaba em <span class="cd" data-cd="curto">--</span></span><svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg></div><div class="bf-grupo" aria-hidden="true"><span>Black Friday</span><svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg><span>20% OFF</span><svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg><span>-R$187 de desconto</span><svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg><span>Acaba em <span class="cd" data-cd="curto">--</span></span><svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg></div><div class="bf-grupo" aria-hidden="true"><span>Black Friday</span><svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg><span>20% OFF</span><svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg><span>-R$187 de desconto</span><svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg><span>Acaba em <span class="cd" data-cd="curto">--</span></span><svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg></div><div class="bf-grupo" aria-hidden="true"><span>Black Friday</span><svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg><span>20% OFF</span><svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg><span>-R$187 de desconto</span><svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg><span>Acaba em <span class="cd" data-cd="curto">--</span></span><svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg></div><div class="bf-grupo" aria-hidden="true"><span>Black Friday</span><svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg><span>20% OFF</span><svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg><span>-R$187 de desconto</span><svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg><span>Acaba em <span class="cd" data-cd="curto">--</span></span><svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg></div></div></a>
   <div class="wrap">
     <a class="logo" href="#topo" aria-label="genie">gen<span class="li" id="logo-i">ı<svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg></span>e</a>
     <nav class="abas" aria-label="Abas do Genie">
@@ -387,15 +519,26 @@ img.tela{border:3px solid #F5F5F5 !important;border-radius:18px !important;box-s
 
 <section class="hero intro">
   <div class="wrap">
-    <p class="logo logo-hero" aria-label="genie">gen<span class="li">ı<svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg></span>e</p>
+    <div class="bf-card so-bf"><div class="bf-card-in">
+      <div class="bf-esq">
+        <span class="bf-tag"><i class="pt"></i>Black Friday</span>
+        <p class="bf-oferta"><span class="bf-pct">-20%</span><span class="bf-sep"></span><span class="bf-reais"><b>-R$<span data-conta="187">187</span></b><span>de desconto</span></span></p>
+      </div>
+      <div class="bf-dir">
+        <div class="bf-cd" data-cd="grande"></div>
+        <p class="bf-leg">Acaba <b>sexta, 23:59</b>. Depois volta pro preço normal.</p>
+      </div>
+    </div></div>
+        <p class="logo logo-hero" aria-label="genie">gen<span class="li">ı<svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg></span>e</p>
     <h1>R$3.000 Por Mês. 1 Hora por dia. Zero edição.<br>Canais Dark 100% Automáticos</h1>
     <p class="lead">Um software para canais do YouTube: caça vídeos que bombaram em qualquer nicho e produz o vídeo completo 100% no automático e no estilo que você decidir.</p>
     <ol class="cadeia" aria-label="O que o Genie faz em cada vídeo">
       <li>Roteiro</li><li>Voz</li><li>Edição</li><li>Thumbnail</li><li>Título</li><li>SEO</li><li>Postagem</li>
     </ol>
     <div class="acoes">
-      <a class="btn btn-pri" href="#oferta" data-cta><span>Quero o Genie </span><span class="seta" aria-hidden="true">→</span></a>
-      <p class="preco-mini"><b><small class="x12">12x</small>R$97</b> · acesso vitalício</p>
+      <a class="btn btn-pri" href="#oferta" data-cta><span class="so-normal">Quero o Genie </span><span class="so-bf">Quero com 20% OFF </span><span class="seta" aria-hidden="true">→</span></a>
+      <p class="preco-mini so-normal"><b><small class="x12">12x</small>R$97</b> · acesso vitalício</p>
+      <p class="preco-mini so-bf"><span class="bf-risco">12x R$97</span><b class="bf-novo"><small class="x12">12x</small>R$77,60</b><span>· ou R$750 à vista</span></p>
     </div>
   </div>
 </section>
@@ -451,7 +594,7 @@ img.tela{border:3px solid #F5F5F5 !important;border-radius:18px !important;box-s
       <p>Você escreve o nicho e clica em Caçar. O Genie caça por todo YouTube e devolve vídeos que bombaram muito acima da média.</p>
     </div>
     <img class="tela rv" src="img/ideas-zoom.webp" width="1600" height="867" loading="lazy" alt="Caçada com vídeos gringos de vários nichos e o multiplicador de outlier de cada um">
-    <div class="mini-cta rv"><a class="btn btn-mini" href="#oferta" data-cta><span>Quero o Genie</span> <span class="seta" aria-hidden="true">→</span></a><span class="mini-preco"><b><small class="x12">12x</small>R$97</b> · acesso vitalício</span></div>
+    <div class="mini-cta rv"><a class="btn btn-mini" href="#oferta" data-cta><span>Quero o Genie</span> <span class="seta" aria-hidden="true">→</span></a><span class="mini-preco so-normal"><b><small class="x12">12x</small>R$97</b> · acesso vitalício</span><span class="mini-preco so-bf"><span class="bf-risco">12x R$97</span> <b class="bf-novo"><small class="x12">12x</small>R$77,60</b> <em class="bf-chip">-20% Black Friday</em></span></div>
   </div>
 </section>
 
@@ -462,7 +605,7 @@ img.tela{border:3px solid #F5F5F5 !important;border-radius:18px !important;box-s
       <p>Nicho, tom, edição, thumbnail e produto de cada canal ficam guardados. Todo vídeo segue o molde do jeito que você mandar.</p>
     </div>
     <img class="tela rv" src="img/moldes-canais.webp" width="2000" height="492" loading="lazy" alt="Aba Moldes: seis canais, cada um com a sua ficha">
-    <div class="mini-cta rv"><a class="btn btn-mini" href="#oferta" data-cta><span>Quero o Genie</span> <span class="seta" aria-hidden="true">→</span></a><span class="mini-preco"><b><small class="x12">12x</small>R$97</b> · acesso vitalício</span></div>
+    <div class="mini-cta rv"><a class="btn btn-mini" href="#oferta" data-cta><span>Quero o Genie</span> <span class="seta" aria-hidden="true">→</span></a><span class="mini-preco so-normal"><b><small class="x12">12x</small>R$97</b> · acesso vitalício</span><span class="mini-preco so-bf"><span class="bf-risco">12x R$97</span> <b class="bf-novo"><small class="x12">12x</small>R$77,60</b> <em class="bf-chip">-20% Black Friday</em></span></div>
   </div>
 </section>
 
@@ -488,7 +631,7 @@ img.tela{border:3px solid #F5F5F5 !important;border-radius:18px !important;box-s
         <figure><video src="estilos/12.mp4" poster="estilos/12.jpg" muted loop playsinline preload="none" aria-label="Prévia do estilo Terminal ASCII"></video><figcaption>Terminal ASCII</figcaption></figure>
         <figure><video src="estilos/6.mp4" poster="estilos/6.jpg" muted loop playsinline preload="none" aria-label="Prévia do estilo Backrooms"></video><figcaption>Backrooms</figcaption></figure>
       </div>
-    <div class="mini-cta rv"><a class="btn btn-mini" href="#oferta" data-cta><span>Quero o Genie</span> <span class="seta" aria-hidden="true">→</span></a><span class="mini-preco"><b><small class="x12">12x</small>R$97</b> · acesso vitalício</span></div>
+    <div class="mini-cta rv"><a class="btn btn-mini" href="#oferta" data-cta><span>Quero o Genie</span> <span class="seta" aria-hidden="true">→</span></a><span class="mini-preco so-normal"><b><small class="x12">12x</small>R$97</b> · acesso vitalício</span><span class="mini-preco so-bf"><span class="bf-risco">12x R$97</span> <b class="bf-novo"><small class="x12">12x</small>R$77,60</b> <em class="bf-chip">-20% Black Friday</em></span></div>
   </div>
 </section>
 
@@ -499,7 +642,7 @@ img.tela{border:3px solid #F5F5F5 !important;border-radius:18px !important;box-s
       <p>Roteiro, voz, edição e thumbnail, tudo no estilo que <b>VOCÊ</b> decidir!</p>
     </div>
     <img class="tela rv" src="img/producao.webp" width="2000" height="1250" loading="lazy" alt="Aba Produção com vídeos sendo produzidos e o menu de escolher o molde aberto">
-    <div class="mini-cta rv"><a class="btn btn-mini" href="#oferta" data-cta><span>Quero o Genie</span> <span class="seta" aria-hidden="true">→</span></a><span class="mini-preco"><b><small class="x12">12x</small>R$97</b> · acesso vitalício</span></div>
+    <div class="mini-cta rv"><a class="btn btn-mini" href="#oferta" data-cta><span>Quero o Genie</span> <span class="seta" aria-hidden="true">→</span></a><span class="mini-preco so-normal"><b><small class="x12">12x</small>R$97</b> · acesso vitalício</span><span class="mini-preco so-bf"><span class="bf-risco">12x R$97</span> <b class="bf-novo"><small class="x12">12x</small>R$77,60</b> <em class="bf-chip">-20% Black Friday</em></span></div>
   </div>
 </section>
 
@@ -510,7 +653,7 @@ img.tela{border:3px solid #F5F5F5 !important;border-radius:18px !important;box-s
       <p>Seu único trabalho → clicar em <b>Upload</b>.</p>
     </div>
     <img class="tela rv" src="img/upload.webp" width="2000" height="1479" loading="lazy" alt="Fila de Upload com vídeos de vários canais, cada um com thumb, título e data programada">
-    <div class="mini-cta rv"><a class="btn btn-mini" href="#oferta" data-cta><span>Quero o Genie</span> <span class="seta" aria-hidden="true">→</span></a><span class="mini-preco"><b><small class="x12">12x</small>R$97</b> · acesso vitalício</span></div>
+    <div class="mini-cta rv"><a class="btn btn-mini" href="#oferta" data-cta><span>Quero o Genie</span> <span class="seta" aria-hidden="true">→</span></a><span class="mini-preco so-normal"><b><small class="x12">12x</small>R$97</b> · acesso vitalício</span><span class="mini-preco so-bf"><span class="bf-risco">12x R$97</span> <b class="bf-novo"><small class="x12">12x</small>R$77,60</b> <em class="bf-chip">-20% Black Friday</em></span></div>
   </div>
 </section>
 
@@ -521,7 +664,7 @@ img.tela{border:3px solid #F5F5F5 !important;border-radius:18px !important;box-s
       <p>Views, inscritos, AdSense, vendas e parcerias de cada canal, atualizados todo dia.</p>
     </div>
     <img class="tela rv" src="img/painel.webp" width="2000" height="1250" loading="lazy" alt="Painel com receita total no topo e um card por canal">
-    <div class="mini-cta rv"><a class="btn btn-mini" href="#oferta" data-cta><span>Quero o Genie</span> <span class="seta" aria-hidden="true">→</span></a><span class="mini-preco"><b><small class="x12">12x</small>R$97</b> · acesso vitalício</span></div>
+    <div class="mini-cta rv"><a class="btn btn-mini" href="#oferta" data-cta><span>Quero o Genie</span> <span class="seta" aria-hidden="true">→</span></a><span class="mini-preco so-normal"><b><small class="x12">12x</small>R$97</b> · acesso vitalício</span><span class="mini-preco so-bf"><span class="bf-risco">12x R$97</span> <b class="bf-novo"><small class="x12">12x</small>R$77,60</b> <em class="bf-chip">-20% Black Friday</em></span></div>
   </div>
 </section>
 
@@ -542,10 +685,16 @@ img.tela{border:3px solid #F5F5F5 !important;border-radius:18px !important;box-s
       </ul>
     </div>
     <div class="caixa">
+      <div class="bf-selo so-bf">Black Friday<b>-20%</b></div>
       <p class="de">Genie completo · acesso vitalício</p>
-      <p class="valor"><small class="x12">12x</small>R$97</p>
-      <p class="parc">ou R$ 937 à vista</p>
-      <a class="btn btn-pri" href="#oferta" data-cta><span>Quero o Genie </span><span class="seta" aria-hidden="true">→</span></a>
+      <p class="bf-antes so-bf">de <span class="bf-risco">12x R$97</span> por</p>
+      <p class="valor so-normal"><small class="x12">12x</small>R$97</p>
+      <p class="valor so-bf"><span class="bf-novo"><small class="x12">12x</small>R$77,60</span></p>
+      <p class="parc so-normal">ou R$ 937 à vista</p>
+      <p class="parc so-bf">ou R$ 750 à vista <span class="bf-risco">R$ 937</span></p>
+      <p class="bf-eco so-bf">Você economiza <b>R$<span data-conta="187">187</span></b></p>
+      <div class="bf-cd-box so-bf"><p><i>●</i> A oferta acaba em</p><div class="bf-cd" data-cd="grande"></div></div>
+      <a class="btn btn-pri" href="#oferta" data-cta><span class="so-normal">Quero o Genie </span><span class="so-bf">Quero com 20% OFF </span><span class="seta" aria-hidden="true">→</span></a>
       <p class="garantia"><b>Garantia de 7 dias</b></p>
     </div>
   </div>
@@ -571,7 +720,7 @@ img.tela{border:3px solid #F5F5F5 !important;border-radius:18px !important;box-s
 </main>
 
 <div class="barra" id="barra" aria-hidden="true">
-  <div><b><small class="x12">12x</small>R$97</b><span>7 dias de garantia</span></div>
+  <div class="so-normal"><b><small class="x12">12x</small>R$97</b><span>7 dias de garantia</span></div><div class="so-bf"><b><span class="bf-risco">12x R$97</span><span class="bf-novo"><small class="x12">12x</small>R$77,60</span></b><span class="so-bf">-20% Black Friday · <b data-cd="curto">--</b></span></div>
   <a class="btn btn-pri" href="#oferta" data-cta tabindex="-1"><span>Quero o Genie</span></a>
 </div>
 
@@ -580,6 +729,7 @@ img.tela{border:3px solid #F5F5F5 !important;border-radius:18px !important;box-s
   <div class="ck-box">
     <button class="ck-x" type="button" id="ck-x" aria-label="Fechar">×</button>
     <p class="logo" id="ck-titulo" aria-label="genie">gen<span class="li">ı<svg viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C56 44 56 44 100 50C56 56 56 56 50 100C44 56 44 56 0 50C44 44 44 44 50 0Z"/></svg></span>e</p>
+    <p class="ck-bf so-bf"><b>Black Friday</b> -R$187 já aplicado · acaba em <span class="cd" data-cd="curto">--</span></p>
     <form id="ck-form" novalidate>
       <label>Nome<input id="ck-nome" name="name" type="text" autocomplete="name" placeholder="Seu nome completo" required></label>
       <label>Email<input id="ck-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="voce@email.com" required></label>
@@ -669,6 +819,7 @@ const ORIGEM = (function(){
       utm_source: ORIGEM.s, utm_medium: ORIGEM.m,
       utm_content: ORIGEM.t, pagina: location.href.split('?')[0]};
     const u = new URL(CHECKOUT);
+    if (document.body.classList.contains('bf')) u.searchParams.set('coupon', 'BLACK');   // Black Friday: Kiwify já abre com o desconto
     u.searchParams.set('name', n); u.searchParams.set('email', em); u.searchParams.set('phone', dz);
     q.forEach((v, k) => { if (!u.searchParams.has(k)) u.searchParams.set(k, v); });   // repassa UTMs
     if (!u.searchParams.has('utm_source') && ORIGEM.s !== 'direto') {   // Kiwify também vê a origem descoberta
@@ -724,6 +875,49 @@ const ORIGEM = (function(){
   var b=document.getElementById('barra'),of=document.getElementById('oferta');
   function f(){var r=of.getBoundingClientRect();var naOferta=r.top<innerHeight&&r.bottom>0;b.classList.toggle('on',scrollY>innerHeight*.8&&!naOferta);}
   addEventListener('scroll',f,{passive:true});f();
+})();
+</script>
+<script>
+// ---- Black Friday: contador, número subindo e confete na caixa ----
+(function(){
+  var B=document.body,p2=function(n){return (n<10?'0':'')+n},ant='';
+  var grandes=[].slice.call(document.querySelectorAll('[data-cd="grande"]')),curtos=[].slice.call(document.querySelectorAll('[data-cd="curto"]'));
+  var nomes=['dias','horas','min','seg'];
+  grandes.forEach(function(g){g.innerHTML=nomes.map(function(n,i){return (i?'<i class="sep">:</i>':'')+'<div class="u'+(i==3?' u-s':'')+'"><b><span class="d">0</span><span class="d">0</span></b><small>'+n+'</small></div>'}).join('')});
+  function tick(){
+    var ms=BF_FIM-Date.now();
+    if(ms<=0){B.classList.remove('bf');return false}
+    var s=Math.floor(ms/1000),p=[Math.floor(s/86400),Math.floor(s%86400/3600),Math.floor(s%3600/60),s%60],txt=p.map(p2).join('');
+    grandes.forEach(function(g){
+      var ds=g.querySelectorAll('.d');
+      for(var i=0;i<8;i++)if(ds[i].textContent!==txt[i]){var n=document.createElement('span');n.className='d'+(ant?' vira':'');n.textContent=txt[i];ds[i].parentNode.replaceChild(n,ds[i])}
+      var us=g.querySelector('.u-s');if(ant){us.classList.remove('bate');void us.offsetWidth;us.classList.add('bate')}
+    });
+    var c=(p[0]?p[0]+'d ':'')+p2(p[1])+':'+p2(p[2])+':'+p2(p[3]);
+    curtos.forEach(function(e){e.textContent=c});
+    ant=txt;return true;
+  }
+  if(!tick())return;
+  (function laco(){setTimeout(function(){if(tick())laco()},1000-Date.now()%1000+15)})();
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches||!('IntersectionObserver' in window))return;
+  // -R$187 sobe de 0 quando aparece
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(!e.isIntersecting)return;io.unobserve(e.target);
+    var el=e.target,alvo=+el.dataset.conta,atraso=el.closest('.hero')?500:200,t0=0;
+    el.textContent='0';
+    setTimeout(function(){requestAnimationFrame(function f(t){if(!t0)t0=t;var k=Math.min(1,(t-t0)/1100);el.textContent=Math.round(alvo*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(f)})},atraso);
+  })},{threshold:.6});
+  document.querySelectorAll('[data-conta]').forEach(function(e){io.observe(e)});
+  // confete saindo do selo quando a caixa aparece
+  var cx=document.querySelector('.caixa'),selo=document.querySelector('.bf-selo');
+  if(cx&&selo){var io2=new IntersectionObserver(function(es){if(!es[0].isIntersecting)return;io2.disconnect();
+    var cores=['#39FF6A','#ffffff','#39FF6A','#B6FFC8','#0A0A0A'];
+    for(var i=0;i<46;i++){var d=document.createElement('i');d.className='bf-confete';d.style.background=cores[i%cores.length];
+      d.style.right='20px';d.style.top='0';cx.appendChild(d);
+      var a=(-170+Math.random()*160)*Math.PI/180,v=140+Math.random()*260,dx=Math.cos(a)*v,dy=Math.sin(a)*v,r=Math.random()*720-360;
+      d.animate([{transform:'translate(0,0) rotate(0)',opacity:1},{transform:'translate('+dx*.7+'px,'+dy*.7+'px) rotate('+r*.5+'deg)',opacity:1,offset:.45},
+        {transform:'translate('+dx+'px,'+(dy+260)+'px) rotate('+r+'deg)',opacity:0}],{duration:1500+Math.random()*700,easing:'cubic-bezier(.2,.7,.4,1)',delay:300,fill:'both'}).onfinish=(function(x){return function(){x.remove()}})(d);}
+  },{threshold:.45});io2.observe(cx)}
 })();
 </script>
 </body>
